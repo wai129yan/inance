@@ -17,15 +17,15 @@ $sql = "INSERT INTO users(name,email,password,phone,photo,address,created_date,u
 $statement = $pdo->prepare($sql);
 
 
-$name = "popo";
-$email = "aung@gmail.com";
-$password = "123456";
-$phone = "093433";
-$photo = "aa.jpg";
-$address = "ygn";
-$created_date = $now;
-$updated_date = $now;
-$statement = $pdo->prepare($sql);
+// $name = "popo";
+// $email = "aung@gmail.com";
+// $password = "123456";
+// $phone = "093433";
+// $photo = "aa.jpg";
+// $address = "ygn";
+// $created_date = $now;
+// $updated_date = $now;
+// $statement = $pdo->prepare($sql);
 
 $statement -> bindParam(':email',$email,PDO::PARAM_STR);
 $statement -> bindParam(':phone',$phone,PDO::PARAM_STR);
