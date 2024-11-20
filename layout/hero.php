@@ -38,13 +38,16 @@
                                   <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
                               </li>
                               <li class="nav-item">
-                                  <a class="nav-link" href="about.php"> About</a>
+                                  <a class="nav-link" href="#about"> About</a>
                               </li>
                               <li class="nav-item">
-                                  <a class="nav-link" href="service.php">Services</a>
+                                  <a class="nav-link" href="#service">Services</a>
                               </li>
                               <li class="nav-item">
-                                  <a class="nav-link" href="contact.php">Contact Us</a>
+                                  <a class="nav-link" href="#contact">Contact Us</a>
+                              </li>
+                              <li class="nav-item">
+                                  <a class="nav-link" href="login.php">Technicians</a>
                               </li>
                           </ul>
                       </div>
