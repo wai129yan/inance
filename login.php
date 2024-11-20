@@ -21,7 +21,9 @@ include("./layout/header.php");
                         <input type="password" name="password" class="form-control" placeholder="Password" required />
                     </div>
 
+                    <div class="d-flex justify-content-center">
                     <input type="submit" value="Login" class="btn btn-primary">
+                    </div>
                     <div class="d-flex justify-content-center align-items-center">
                         <hr class="bg-danger  w-100">
                         <span class="mx-2">OR</span>

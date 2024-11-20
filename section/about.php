@@ -1,4 +1,4 @@
-<section class="about_section layout_padding-bottom">
+<section class="about_section layout_padding-bottom" id="about">
     <div class="container">
         <div class="row">
             <div class="col-lg-5 col-md-6">
@@ -9,7 +9,7 @@
                     <p>
                         There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomisedThere are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised
                     </p>
-                    <a href="">
+                    <a href="#">
                         Read More
                     </a>
                 </div>

@@ -7,13 +7,13 @@
                       <a href="">
                           <i class="fa fa-phone" aria-hidden="true"></i>
                           <span>
-                              Call : +01 123455678990
+                              Call : +81 09044540786
                           </span>
                       </a>
                       <a href="">
                           <i class="fa fa-envelope" aria-hidden="true"></i>
                           <span>
-                              Email : demo@gmail.com
+                              Email : waiyan.toshima12@gmail.com
                           </span>
                       </a>
                   </div>
@@ -70,7 +70,7 @@
                           <p>
                               Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui harum voluptatem adipisci. Quos molestiae saepe dicta nobis pariatur, tempora iusto, ad possimus soluta hic praesentium mollitia consequatur beatae, aspernatur culpa.
                           </p>
-                          <a href="">
+                          <a href="#" >
                               Contact Us
                           </a>
                       </div>

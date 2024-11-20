@@ -1,4 +1,4 @@
-<section class="service_section layout_padding">
+<section class="service_section layout_padding" id="service">
     <div class="container ">
         <div class="heading_container heading_center">
             <h2> Our Services </h2>
