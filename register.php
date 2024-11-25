@@ -1,38 +1,48 @@
 <?php
 include("./database/db.php");
-include("./layout/header.php");
+
 $t = isset($_GET['t']);
 ?>
 <?php
 $errors = [];
 $success = [];
+$now = new DateTime('now');
+$now = $now->format('Y-m-d H:i:s');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['register'])) {
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $phone = $_POST['phone'];
-        $specialization = $_POST['special'];
-        $registerdate = $_POST['registerdate'];
+    if (isset($_POST['tech_register'])) {
+        $name = $_POST['Name'];
+        $email = $_POST['Email'];
+        $password = $_POST['Password'];
+        $password = password_hash($password, PASSWORD_DEFAULT);
+        $phone = $_POST['Phone'];
+        $career_id = $_POST['career_id'];
+        $address = $_POST['Address'];
+        $specialization = $_POST['Specialization'];
+
+        // $registerdate = $_POST['registerdate'];
 
         empty($name) ? $errors[] = "Name Required" : "";
         empty($email) ? $errors[] = "Email Required" : "";
         empty($phone) ? $errors[] = "Phone Required" : "";
-        empty($specialization) ? $errors[] = "Specialization Required" : "";
-        empty($registerdate) ? $errors[] = "Register Date Required" : "";
+        empty($career_id) ? $errors[] = "Career Required" : "";
+        // empty($registerdate) ? $errors[] = "Register Date Required" : "";
 
         !filter_var($email, FILTER_VALIDATE_EMAIL) ? $errors[] = "Invalid Email Format" : "";
         if (count($errors) == 0) {
 
-            $sql = "INSERT INTO technicians (name, email, phone, specialization, registerdate) VALUES (:name, :email, :phone, :specialization, :registerdate)";
+            $sql = "INSERT INTO technicians (Name, Email,Password, Phone, career_id, Address, Specialization, RegistrationDate) VALUES (:name, :email, :password, :phone, :career_id, :address, :specialization, :registerdate)";
 
             $stmt = $pdo->prepare($sql);
 
             $stmt->bindParam(':name', $name, PDO::PARAM_STR);
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':password', $password, PDO::PARAM_STR);
             $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+            $stmt->bindParam(':career_id', $career_id, PDO::PARAM_STR);
+            $stmt->bindParam(':address', $address, PDO::PARAM_STR);
             $stmt->bindParam(':specialization', $specialization, PDO::PARAM_STR);
-            $stmt->bindParam(':registerdate', $registerdate, PDO::PARAM_STR);
+            $stmt->bindParam(':registerdate', $now, PDO::PARAM_STR);
             // $stmt->execute();
             if ($stmt->execute()) {
                 $success[] = "Success";
@@ -42,8 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 }
+include("./layout/header.php");
 
-include "errors.php";
 include "success.php";
 ?>
 
@@ -54,18 +64,19 @@ include "success.php";
             <div class="col-md-6 px-4 py-4 shadow rounded-lg bg-light">
                 <!-- <h3 class="text-center mb-4">Register</h3> -->
                 <?php if ($t): ?>
+                    <?php include "errors.php"; ?>
                     <form action="register.php" method="post">
                         <div class="heading_container">
                             <h2>Register Techintion</h2>
                         </div>
                         <div class="mb-3">
-                            <input type="text" name="name" class="form-control" placeholder="Name" required />
+                            <input type="text" name="Name" class="form-control" placeholder="Name" required />
                         </div>
                         <div class="mb-3">
-                            <input type="email" name="email" class="form-control" placeholder="Email" required />
+                            <input type="email" name="Email" class="form-control" placeholder="Email" required />
                         </div>
                         <div class="mb-3">
-                            <input type="password" name="password" class="form-control" placeholder="password" required />
+                            <input type="password" name="Password" class="form-control" placeholder="password" required />
                         </div>
                         <div class="mb-3">
                             <select name="career_id" id="" class="form-control">
@@ -81,24 +92,26 @@ include "success.php";
                             </select>
                         </div>
                         <div class="mb-3">
-                            <textarea name="special" id="" placeholder="Specialization" class="form-control"></textarea>
+                            <textarea name="Specialization" id="" placeholder="Specialization" class="form-control"></textarea>
                         </div>
                         <div class="mb-3">
-                            <input type="text" name="phone" class="form-control" placeholder="Phone Number" required />
+                            <input type="text" name="Phone" class="form-control" placeholder="Phone Number" required />
                         </div>
                         <div class="mb-3">
-                            <textarea name="address" id="" placeholder="Address" class="form-control"></textarea>
+                            <textarea name="Address" id="" placeholder="Address" class="form-control"></textarea>
                         </div>
-                        <div class="mb-3">
-                            <input type="date" name="registerdate" class="form-control" required />
-                        </div>
+                        <!-- <div class="mb-3">
+                            <input type="date" name="RegisterDate" class="form-control" required />
+                        </div> -->
+
                         <div class="d-grid">
-                            <button type="submit" name="register" class="btn btn-primary">Register</button>
+                            <button type="submit" name="tech_register" class="btn btn-primary">Register</button>
                             <a href="login.php">Back</a>
                         </div>
                     </form>
                 <?php else: ?>
-                    <form action="register.php" method="post">
+                    <!-- Customer Register -->
+                    <form action="" method="post">
                         <div class="heading_container">
                             <h2>Register Customer</h2>
                         </div>
@@ -121,7 +134,7 @@ include "success.php";
 
 
                         <div class="d-grid">
-                            <button type="submit" name="register" class="btn btn-primary">Register</button>
+                            <button type="submit" name="customer_register" class="btn btn-primary">Register</button>
                             <a href="login.php">Back</a>
                         </div>
                     </form>
