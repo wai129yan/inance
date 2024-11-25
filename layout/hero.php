@@ -28,7 +28,9 @@
                           </span>
                       </a>
 
-                      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                      <button class="navbar-toggler" type="button" data-toggle="collapse"
+                          data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                          aria-expanded="false" aria-label="Toggle navigation">
                           <span class=""> </span>
                       </button>
 
@@ -47,7 +49,7 @@
                                   <a class="nav-link" href="#contact">Contact Us</a>
                               </li>
                               <li class="nav-item">
-                                  <a class="nav-link" href="login.php">Technicians</a>
+                                  <a class="nav-link" href="login.php?t=tech">Technicians</a>
                               </li>
                           </ul>
                       </div>
@@ -68,9 +70,11 @@
                               Services
                           </h1>
                           <p>
-                              Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui harum voluptatem adipisci. Quos molestiae saepe dicta nobis pariatur, tempora iusto, ad possimus soluta hic praesentium mollitia consequatur beatae, aspernatur culpa.
+                              Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui harum voluptatem adipisci.
+                              Quos molestiae saepe dicta nobis pariatur, tempora iusto, ad possimus soluta hic
+                              praesentium mollitia consequatur beatae, aspernatur culpa.
                           </p>
-                          <a href="#" >
+                          <a href="#">
                               Contact Us
                           </a>
                       </div>

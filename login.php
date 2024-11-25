@@ -3,7 +3,11 @@ include("./database/db.php");
 
 include("./layout/header.php");
 
+$t = isset($_GET['t']);
 
+if ($t) {
+    $tech = $_GET['t'];
+}
 
 ?>
 
@@ -12,6 +16,7 @@ include("./layout/header.php");
 
         <div class="">
             <div class="w-50 m-auto px-5 py-2 mt-5 shadow rounded-lg">
+
                 <form action="" method="post" class="mt-3">
                     <h3 class="text-center">Login Here</h3>
                     <div class="mb-3">
@@ -22,7 +27,7 @@ include("./layout/header.php");
                     </div>
 
                     <div class="d-flex justify-content-center">
-                    <input type="submit" value="Login" class="btn btn-primary">
+                        <input type="submit" value="Login" class="btn btn-primary">
                     </div>
                     <div class="d-flex justify-content-center align-items-center">
                         <hr class="bg-danger  w-100">
@@ -30,8 +35,11 @@ include("./layout/header.php");
                         <hr class="bg-danger  w-100">
                     </div>
                     <div class="text-center pb-3 mt-3">
-
-                        <a href="register.php" class="btn btn-success">Register</a>
+                        <?php if ($t): ?>
+                            <a href="register.php?t=<?= $tech ?>" class="btn btn-success">Register</a>
+                        <?php else: ?>
+                            <a href="register.php" class="btn btn-success">Register</a>
+                        <?php endif ?>
                     </div>
                 </form>
             </div>
@@ -39,4 +47,3 @@ include("./layout/header.php");
         </div>
     </div>
 </section>
-
