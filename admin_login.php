@@ -3,7 +3,7 @@
 require "database/db.php";
 require "database/config.php";
 
-$errors = [];
+$errors = []; 
 $success = [];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
