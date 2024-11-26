@@ -52,6 +52,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 }
+// Customer Register
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    if(isset($_POST['customer_register'])){
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $password = password_hash($password, PASSWORD_DEFAULT);
+        $phone = $_POST['phone'];
+        $address = $_POST['address'];
+
+        empty($name) ? $errors[] = "Name Required" : "";
+        empty($email) ? $errors[] = "Email Required" : "";
+        empty($phone) ? $errors[] = "Phone Required" : "";
+        empty($address) ? $errors[] = "Address Required" : "";
+
+        !filter_var($email, FILTER_VALIDATE_EMAIL) ? $errors[] = "Invalid Email Format" : "";
+        if(count($errors) == 0){
+            $sql = "INSERT INTO customers (name, email, password, phone, address) VALUES (:name, :email, :password, :phone, :address)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+            $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+            $stmt->bindParam(':address', $address, PDO::PARAM_STR);
+            if($stmt->execute()){
+                $success[] = "Success";
+            }else{
+                $error[] = "Error message ";
+            }
+        }
+
+    }
+}
+
 include("./layout/header.php");
 
 include "success.php";
