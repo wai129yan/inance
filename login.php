@@ -3,7 +3,7 @@ session_start();
 include("./database/db.php");
 
 $errors = [];
-
+ 
 $t = isset($_GET['t']);
 if ($t) {
     $tech = $_GET['t'];
@@ -48,14 +48,14 @@ if(isset($_POST['Login'])){
     }
 }
 
-
+ 
 
 include("./layout/header.php");
 ?>
 
 <section class="contact_section layout_padding mt-5" id="contact">
     <div class="container">
-
+        <?php include("errors.php"); ?>
         <div class="">
             <div class="w-50 m-auto px-5 py-2 mt-5 shadow rounded-lg">
 
@@ -71,6 +71,7 @@ include("./layout/header.php");
                     <div class="d-flex justify-content-center">
                         <input type="submit" name="Login" value="Login" class="btn btn-primary">
                     </div>
+
                     <div class="d-flex justify-content-center align-items-center">
                         <hr class="bg-danger  w-100">
                         <span class="mx-2">OR</span>
