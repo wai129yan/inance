@@ -11,9 +11,9 @@ $now = $now->format('Y-m-d H:i:s');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['tech_register'])) {
-        $name = $_POST['Name'];
-        $email = $_POST['Email'];
-        $password = $_POST['Password'];
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
         $password = password_hash($password, PASSWORD_DEFAULT);
         $phone = $_POST['Phone'];
         $career_id = $_POST['career_id'];
@@ -30,8 +30,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         !filter_var($email, FILTER_VALIDATE_EMAIL) ? $errors[] = "Invalid Email Format" : "";
         if (count($errors) == 0) {
+            $exitUser = "SELECT * FROM technicians WHERE email = :email";
+            $stmt = $pdo->prepare($exitUser);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->execute();
+            $exitUser = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $sql = "INSERT INTO technicians (Name, Email,Password, Phone, career_id, Address, Specialization, RegistrationDate) VALUES (:name, :email, :password, :phone, :career_id, :address, :specialization, :registerdate)";
+            if($exitUser){
+                $errors[] = "Email Already Exists";
+            }else{
+            $sql = "INSERT INTO technicians (name, email,password, Phone, career_id, Address, Specialization, RegistrationDate) VALUES (:name, :email, :password, :phone, :career_id, :address, :specialization, :registerdate)";
 
             $stmt = $pdo->prepare($sql);
 
@@ -46,15 +54,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // $stmt->execute();
             if ($stmt->execute()) {
                 $success[] = "Success";
+                header("Location:login.php?t=tech");
             } else {
                 $error[] = "Error message ";
             }
         }
     }
 }
-// Customer Register
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    if(isset($_POST['customer_register'])){
+}
+
+// customer register data input
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['customer_register'])) {
         $name = $_POST['name'];
         $email = $_POST['email'];
         $password = $_POST['password'];
@@ -68,23 +79,37 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         empty($address) ? $errors[] = "Address Required" : "";
 
         !filter_var($email, FILTER_VALIDATE_EMAIL) ? $errors[] = "Invalid Email Format" : "";
-        if(count($errors) == 0){
-            $sql = "INSERT INTO customers (name, email, password, phone, address) VALUES (:name, :email, :password, :phone, :address)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+        if (count($errors) == 0) {
+            $custUser = "SELECT * FROM customers WHERE email = :email";
+            $stmt = $pdo->prepare($custUser);
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-            $stmt->bindParam(':password', $password, PDO::PARAM_STR);
-            $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
-            $stmt->bindParam(':address', $address, PDO::PARAM_STR);
-            if($stmt->execute()){
-                $success[] = "Success";
-            }else{
-                $error[] = "Error message ";
+            $stmt->execute();
+            $custUser = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if($custUser){
+                $errors[] = "Email Already Exists";
+            } else {
+                $sql = "INSERT INTO customers (name,email,password,phone,address,created_date) VALUES (:name,:email,:password,:phone,:address,:registerdate)";
+                $stmt = $pdo->prepare($sql);
+
+                $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+                $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+                $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+                $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+                $stmt->bindParam(':address', $address, PDO::PARAM_STR);
+                $stmt->bindParam(':registerdate', $now, PDO::PARAM_STR);
+
+                if($stmt->execute()){
+                    $success[] = "Success";
+                    header("Location:login.php");
+                } else {
+                    $errors[] = "Error message";
+                }
             }
         }
-
     }
 }
+
 
 include("./layout/header.php");
 
@@ -93,7 +118,7 @@ include "success.php";
 
 <section class="contact_section layout_padding" id="contact">
     <div class="container">
-
+<?php include "errors.php"; ?>
         <div class="row">
             <div class="col-md-6 px-4 py-4 shadow rounded-lg bg-light">
                 <!-- <h3 class="text-center mb-4">Register</h3> -->
@@ -104,13 +129,13 @@ include "success.php";
                             <h2>Register Techintion</h2>
                         </div>
                         <div class="mb-3">
-                            <input type="text" name="Name" class="form-control" placeholder="Name" required />
+                            <input type="text" name="name" class="form-control" placeholder="Name" required />
                         </div>
                         <div class="mb-3">
-                            <input type="email" name="Email" class="form-control" placeholder="Email" required />
+                            <input type="email" name="email" class="form-control" placeholder="Email" required />
                         </div>
                         <div class="mb-3">
-                            <input type="password" name="Password" class="form-control" placeholder="password" required />
+                            <input type="password" name="password" class="form-control" placeholder="password" required />
                         </div>
                         <div class="mb-3">
                             <select name="career_id" id="" class="form-control">
@@ -144,6 +169,7 @@ include "success.php";
                         </div>
                     </form>
                 <?php else: ?>
+
                     <!-- Customer Register -->
                     <form action="" method="post">
                         <div class="heading_container">
@@ -188,3 +214,4 @@ include "success.php";
 <br><br><br><br><br>
 
 <?php include("./layout/footer.php") ?>;
+

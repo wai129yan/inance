@@ -1,19 +1,61 @@
 <?php
+session_start();
 include("./database/db.php");
 
-include("./layout/header.php");
-
+$errors = [];
+ 
 $t = isset($_GET['t']);
-
 if ($t) {
     $tech = $_GET['t'];
 }
 
+if(isset($_POST['Login'])){
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    if($t) {
+        $sql = "SELECT * FROM Technicians WHERE email = :email";
+    }else{
+        $sql = "SELECT * FROM Customers WHERE email = :email";
+    }
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':email',$email,PDO::PARAM_STR);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    // print_r($user);
+    // die();
+    if(!$user){
+        $errors[] = "Email Not Found";
+    }else if (!password_verify($password,$user['password'])){
+        $errors[]  = "Invalid email of password";
+    }
+
+    if(count($errors) == 0){
+        if($email === $user['email'] && password_verify($password, $user['password'])){
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['name'] = $user['name'];
+            header("Location:index.php");
+            exit();
+        }
+    } else {
+        $errors[] = "Error message";
+    }
+
+    if($user){
+        if(password_verify($password,$user['password'])){
+            $_SESSION['user'] = $user;
+            header("Location:index.php");
+        }
+    }
+}
+
+ 
+
+include("./layout/header.php");
 ?>
 
 <section class="contact_section layout_padding mt-5" id="contact">
     <div class="container">
-
+        <?php include("errors.php"); ?>
         <div class="">
             <div class="w-50 m-auto px-5 py-2 mt-5 shadow rounded-lg">
 
@@ -27,8 +69,9 @@ if ($t) {
                     </div>
 
                     <div class="d-flex justify-content-center">
-                        <input type="submit" value="Login" class="btn btn-primary">
+                        <input type="submit" name="Login" value="Login" class="btn btn-primary">
                     </div>
+
                     <div class="d-flex justify-content-center align-items-center">
                         <hr class="bg-danger  w-100">
                         <span class="mx-2">OR</span>
