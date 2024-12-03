@@ -1,6 +1,8 @@
 <?php
 session_start();
 $auth = isset($_SESSION['name']);
+$career = isset($_SESSION['career']);
+
 include("./database/db.php");
 ?>
 
@@ -65,6 +67,13 @@ include("./database/db.php");
                             <?php else: ?>
                                 <li class="nav-item">
                                     <a class="nav-link" href="login.php?t=tech">Login</a>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php if ($career): ?>
+                        
+                                <li class="nav-item">
+                                    <a class="nav-link" href="profile.php">Profile</a>
                                 </li>
                             <?php endif; ?>
 

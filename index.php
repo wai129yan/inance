@@ -13,10 +13,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $sms = $_POST['message'];
 
-  empty($name) ? $errors[]  = "Name Required" : "";
-  empty($phone) ? $errors[]  = "Phone Required" : "";
-  empty($email) ? $errors[]  = "Email Required" : "";
-  empty($sms) ? $errors[] = "Message Required" : "";
+    empty($name) ? $errors[]  = "Name Required" : "";
+    empty($phone) ? $errors[]  = "Phone Required" : "";
+    empty($email) ? $errors[]  = "Email Required" : "";
+    empty($sms) ? $errors[] = "Message Required" : "";
 
     // if (empty($name) || empty($email) || empty($sms)) { // Removed undefined $subject
     //   echo "Please fill in all fields.";
@@ -24,8 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // }
 
 
-    !filter_var($email,FILTER_VALIDATE_EMAIL) ? $errors[] = "Invalid Email Format" : "";
-    if(count($errors) == 0 ){
+    !filter_var($email, FILTER_VALIDATE_EMAIL) ? $errors[] = "Invalid Email Format" : "";
+    if (count($errors) == 0) {
       $sql = "INSERT INTO contact (name, phone, email, message) VALUES (:name, :phone, :email, :sms)";
 
       $stmt = $pdo->prepare($sql);
@@ -42,21 +42,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       }
     }
   }
-  }
+}
 
 
 
-    // // Validation: Check if the email format is valid
-    // if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    //   echo "Invalid email format.";
-    //   exit; // Stop execution if the email is invalid
-    // }
+// // Validation: Check if the email format is valid
+// if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+//   echo "Invalid email format.";
+//   exit; // Stop execution if the email is invalid
+// }
 
 
-    // print_r($stmt);
-    // die();
+// print_r($stmt);
+// die();
 
-    
+
 
 
 ?>
@@ -68,6 +68,7 @@ include "success.php";
 include "layout/header.php";
 include "layout/hero.php";
 
+
 ?>
 
 <!-- feature section -->
@@ -78,6 +79,7 @@ include "section/contact.php";
 include "section/about.php";
 include "section/professional.php";
 include "section/service.php";
+include "section/techanical.php";
 ?>
 
 
@@ -123,6 +125,7 @@ include "section/service.php";
 <!-- end info_section -->
 
 <!-- footer section -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <?php
 include "layout/footer.php";
 ?>
