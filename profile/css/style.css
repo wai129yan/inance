@@ -1,0 +1,46 @@
+.profile-image {
+    width: 150px;
+    height: 150px;
+}
+
+.badge-item {
+    text-align: center;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+}
+
+.badge-item img {
+    max-width: 50px;
+}
+
+.icon-hover {
+    transition: color 0.3s, transform 0.3s;
+}
+
+.icon-hover:hover {
+    color: gold;
+    transform: scale(1.2);
+}
+
+.custom {
+    background-color: rgb(180, 221, 233);
+}
+
+.custom-shadow {
+    box-shadow: 0px 4px 6px rgba(46, 164, 233, 0.822);
+    border-radius: 8px;
+    background: hwb(214 95% 2% / 0.432);
+}
+.c-shadow{
+    box-shadow: 0px 4px 6px rgba(46, 164, 233, 0.822);
+}
+
+.card-body {
+    flex-grow: 1; /* Ensure the body stretches if needed */
+    overflow-y: auto; /* Add scrolling if content overflows */
+}
+.title{
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #61b7da;
+}
