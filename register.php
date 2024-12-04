@@ -1,5 +1,6 @@
 <?php
 include("./database/db.php");
+include ("helper/helperfunction.php");
 
 $t = isset($_GET['t']);
 ?>
@@ -19,7 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $career_id = $_POST['career_id'];
         $address = $_POST['Address'];
         $specialization = $_POST['Specialization'];
-
+        $techCode = generateTechnicianID($name);
+        // echo $techCode;
+        // die();
         // $registerdate = $_POST['registerdate'];
 
         empty($name) ? $errors[] = "Name Required" : "";
@@ -39,24 +42,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if($exitUser){
                 $errors[] = "Email Already Exists";
             }else{
-            $sql = "INSERT INTO technicians (name, email,password, Phone, career_id, Address, Specialization, RegistrationDate) VALUES (:name, :email, :password, :phone, :career_id, :address, :specialization, :registerdate)";
+            $sql = "INSERT INTO technicians (name, email, password, Phone, career_id, Address, Specialization, techCode, RegistrationDate) VALUES (:name, :email, :password, :phone, :career_id, :address, :specialization, :techCode, :registerdate)";
 
             $stmt = $pdo->prepare($sql);
 
             $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR); 
             $stmt->bindParam(':password', $password, PDO::PARAM_STR);
             $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
             $stmt->bindParam(':career_id', $career_id, PDO::PARAM_STR);
             $stmt->bindParam(':address', $address, PDO::PARAM_STR);
             $stmt->bindParam(':specialization', $specialization, PDO::PARAM_STR);
+            $stmt->bindParam(':techCode', $techCode, PDO::PARAM_STR);
             $stmt->bindParam(':registerdate', $now, PDO::PARAM_STR);
-            // $stmt->execute();
+
             if ($stmt->execute()) {
                 $success[] = "Success";
                 header("Location:login.php?t=tech");
             } else {
-                $error[] = "Error message ";
+                $errors[] = "Error message";
             }
         }
     }
