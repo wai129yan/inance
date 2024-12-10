@@ -4,9 +4,10 @@
             <img src="https://i.pravatar.cc/150" alt="Profile Image" class="w-100 h-100 object-fit-cover">
         </div>
         <div class="d-flex flex-column align-items-center ms-3">
-            <h3 class="m-3">Dharmesh Shah</h3>
-            <p class="text-muted">Web Developer</p>
-            <a href="#" class="btn btn-info text-white">+ Contact Me</a>
+            <h3 class="m-3"><?= $techician['name'] ?></h3>
+            <p class="text-muted"><?= $career['name'] ?></p>
+
+            <a href="tel:+<?= $techician['Phone']; ?>" class="btn btn-info text-white">+ Contact Me</a>
         </div>
         <div class="d-flex text-center align-items-center ms-5">
             <i class="fab fa-twitter  icon-hover me-2"></i>
@@ -15,7 +16,8 @@
             <i class="fas fa-globe icon-hover me-2 "></i>
         </div>
         <div class="d-flex text-center align-items-center ms-5">
-            <a href="#" class="btn btn-light">+ Send Message</a>
+
+            <a href="mailto:<?= $techician['email']; ?>" class="btn btn-light">+ Send Message</a>
         </div>
     </div>
 </div>
@@ -50,7 +52,9 @@
         <div class="card w-100 d-flex flex-column c-shadow">
             <div class="card-body">
                 <h5 class="card-title">Professional Bio</h5>
+                <p class="text-danger"><?= $career['description'] ?></p>
                 <p class="card-text">
+
                     An enthusiastic and detail-oriented Web Developer with over 5 years of experience in
                     building responsive, user-friendly websites and web applications.
                     <br><br>
@@ -68,20 +72,21 @@
             <div class="card-body">
                 <h5 class="card-title fs-4">Where I Live</h5>
                 <p class="card-text d-flex justify-content-between">
-                    <span class="title">Fukuoka</span>
-                    <span class="title">Hakata</span>
+                    <span class="title">Address</span>
+                    <span class="title"><?= $techician['Address'] ?></span>
                 </p>
                 <p class="card-text d-flex justify-content-between">
                     <span class="fs-5">Phone</span>
-                    <span class="fs-5">069-6969-769</span>
+                    <span class="fs-5"><a class="text-decoration-none" href="tel:+<?= $techician['Phone']; ?>"><?= $techician['Phone'] ?></a></span>
                 </p>
                 <p class="card-text d-flex justify-content-between">
-                    <span class="fs-5">Social Media</span>
-                    <span class="fs-5">Ar-Chaung in Facebook</span>
+                    <span class="fs-5">Specialization</span>
+                    <span class="fs-5"><?= $techician['Specialization'] ?></span>
                 </p>
                 <p class="card-text d-flex justify-content-between">
                     <span class="fs-5">E-mail</span>
-                    <span class="fs-5">ar.chaung@gmail.com</span>
+                    <span class="fs-5"><a class="text-decoration-none" href="mailto:<?= $techician['email']; ?>"><?= $techician['email'] ?></a></span>
+
                 </p>
             </div>
         </div>
