@@ -73,7 +73,7 @@ include("./database/db.php");
                             <?php if ($career): ?>
                         
                                 <li class="nav-item">
-                                    <a class="nav-link" href="profile/profile.php">Profile</a>
+                                    <a class="nav-link" href="profile/profile.php?id=<?=$_SESSION['t_id'];?>">Profile</a>
                                 </li>
                             <?php endif; ?>
 
