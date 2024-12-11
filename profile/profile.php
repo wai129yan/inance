@@ -4,10 +4,11 @@
 $auth = isset($_SESSION['name']);
 $career = isset($_SESSION['career']);
 
-
+$errors = [];
+$success = [];
 include("../database/db.php");
 
-if(isset($_GET['id'])){
+if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
     $query = "SELECT * FROM technicians WHERE TechnicianID = :id";
@@ -19,17 +20,49 @@ if(isset($_GET['id'])){
 $id = $techician['career_id'];
 $query = "SELECT *  FROM careeries WHERE career_id = :id";
 $stmt = $pdo->prepare($query);
-$stmt -> bindParam(':id',$id,PDO::PARAM_STR);
+$stmt->bindParam(':id', $id, PDO::PARAM_STR);
 $stmt->execute();
 $career = $stmt->fetch(PDO::FETCH_ASSOC);
 // print_r($career);
 // die();
 
+if(isset($_POST['profile_update'])){
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $photo = $_FILES['photos']['name'];
+    $tmpName = $_FILES['photos']['tmp_name'];
+    move_uploaded_file($tmpName,"../images/technician/$photo");
+    $specialization = $_POST['Specialization'];
+    $aboutme = $_POST['aboutme'];
+    $address = $_POST['Address'];
+
+    empty($name) ? $errors[] = "Name Required" : "";
+    empty($specialization) ? $errors[] = "Specialization Required" : "";
+    empty($aboutme) ? $errors[] = "About me required" : "";
+    empty($address) ? $errors[] = "Address me required" : "";
+ 
+    if(count($errors) == 0){
+        $updateTech = "UPDATE technicians SET name = :name, photos = :photos, Specialization = :specialization, aboutme = :aboutme, Address = :address WHERE TechnicianID = :id";
+        $stmt = $pdo->prepare($updateTech);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+        $stmt->bindParam(':photos', $photo, PDO::PARAM_STR);
+        $stmt->bindParam(':specialization', $specialization, PDO::PARAM_STR);
+        $stmt->bindParam(':aboutme', $aboutme, PDO::PARAM_STR);
+        $stmt->bindParam(':address', $address, PDO::PARAM_STR);
+        $result = $stmt->execute();
+        if($result){
+            $success[] = "Profile Updated Successfully";
+            header("Location: profile.php?id=" . $id);
+            exit();
+        }
+        
+    }
+}
 
 
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -39,6 +72,7 @@ $career = $stmt->fetch(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" defer></script>
     <!-- <link rel="stylesheet" type="text/css" href="../css/" /> -->
     <!-- <link rel="stylesheet" href="css/style.css"> -->
     <title>Document</title>
@@ -138,7 +172,7 @@ $career = $stmt->fetch(PDO::FETCH_ASSOC);
                                 <li class="nav-item active">
                                     <a class="nav-link" href="../index.php">Home <span class="sr-only">(current)</span></a>
                                 </li>
-                               
+
                                 <li class="nav-item">
                                     <a class="nav-link" href="../#contact">Contact Us</a>
                                 </li>
@@ -159,25 +193,78 @@ $career = $stmt->fetch(PDO::FETCH_ASSOC);
                                         <a class="nav-link" href="profile/profile.php">Profile</a>
                                     </li>
                                 <?php endif; ?>
-
                             </ul>
-                            <button class="btn-btn-success">Edit</button>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#profile">Edit</button>
                         </div>
                     </nav>
                 </div>
             </div>
+            <!-- Button trigger modal -->
+            <!-- Modal -->
+
+            <div class="modal fade " id="profile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog  w-50 ">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Profile Edit</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="id" value="<?= $techician['TechnicianID']; ?>">
+                                <div class="mb-3">
+                                    <input type="text" name="name" value="<?= $techician['name'] ?? ""; ?>" class="form-control" placeholder="Name">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="email" name="email" value="<?= $techician['email'] ?? ""; ?>" class=" form-control" placeholder="Email" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="">Upload Photo</label>
+                                    <img src="../images/technician/<?= $techician['photos'] ?? 'client-1.jpg'; ?>" alt="" width="150px">
+                                    <input type="file" class="form-control" name="photos">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="text" name="Phone" value="<?= $techician['Phone'] ?? ""; ?>" class="form-control" placeholder="Phone">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="text" name="Specialization" value="<?= $techician['Specialization'] ?? ""; ?>" class="form-control" placeholder="Specialization">
+                                </div>
+                                <div class="mb-3">
+                                    <textarea name="aboutme" class="form-control" placeholder="AboutMe"><?= $techician['aboutme'] ?? ""; ?></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <textarea name="Address" class="form-control" placeholder="Address"><?= $techician['Address'] ?? ""; ?></textarea>
+                                </div>
+                                <input type="submit" class="btn btn-info" name="profile_update">
+
+
+                            </form>
+
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </header>
+
+
+
+
         <!-- end header section -->
         <!-- slider section -->
-       
+
         <!-- end slider section -->
     </div>
 
     <div class="container-fluid p-3">
         <?php
-
+        include_once "../errors.php";
         include_once "./layout/card1.php";
         include_once "./layout/badges.php";
+        
 
         ?>
         <!-- card start -->

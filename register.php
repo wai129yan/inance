@@ -20,7 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $career_id = $_POST['career_id'];
         $address = $_POST['Address'];
         $specialization = $_POST['Specialization'];
-        $techCode = generateTechnicianID($name);
+        $sql = "SELECT techCode FROM technicians ORDER BY techCode DESC LIMIT 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        //generatecode
+        $lastTechCode = $stmt->fetch(PDO::FETCH_ASSOC);
+        $lastId = $lastTechCode ? intval(substr($lastTechCode['techCode'], 2)) : 0;
+        $techCode = generateTechnicianID($name, $lastId);
         // echo $techCode;
         // die();
         // $registerdate = $_POST['registerdate'];

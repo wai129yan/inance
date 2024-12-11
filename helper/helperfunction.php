@@ -1,5 +1,5 @@
 <?php
-function generateTechnicianID($name, $lastId=0)
+function generateTechnicianID($name, $lastId)
 {
     // Extract the first and last characters of the name
     $firstChar = strtolower($name[0]);
