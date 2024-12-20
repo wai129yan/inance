@@ -136,7 +136,7 @@ include "success.php";
                     <?php include "errors.php"; ?>
                     <form action="register.php" method="post">
                         <div class="heading_container">
-                            <h2>Register Techintion</h2>
+                            <h2>Register Techinician</h2>
                         </div>
                         <div class="mb-3">
                             <input type="text" name="name" class="form-control" placeholder="Name" required />
@@ -147,6 +147,7 @@ include "success.php";
                         <div class="mb-3">
                             <input type="password" name="password" class="form-control" placeholder="password" required />
                         </div>
+                        
                         <div class="mb-3">
                             <select name="career_id" id="" class="form-control">
                                 <?php
@@ -160,6 +161,7 @@ include "success.php";
                                 <?php endforeach; ?>
                             </select>
                         </div>
+
                         <div class="mb-3">
                             <textarea name="Specialization" id="" placeholder="Specialization" class="form-control"></textarea>
                         </div>

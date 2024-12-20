@@ -1,7 +1,7 @@
 <div class="row d-flex justify-content-center custom p-5">
     <div class=" d-flex text-center">
         <div class="rounded-circle overflow-hidden profile-image">
-            <img src="../../images/technician/<?= $techician['photos']??'client-1.jpg' ?>" alt="Profile Image" class="w-100 h-100 object-fit-cover">
+            <img src="../../images/technician/<?= $techician['photos'] ?? 'client-1.jpg'; ?>" alt="Profile Image" class="w-100 h-100 object-fit-cover">
         </div>
         <div class="d-flex flex-column align-items-center ms-3">
             <h3 class="m-3"><?= $techician['name'] ?></h3>

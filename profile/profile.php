@@ -1,8 +1,9 @@
 <!-- header -->
 <?php
-// session_start();
+session_start();
 $auth = isset($_SESSION['name']);
-$career = isset($_SESSION['career']);
+$t_id = isset($_SESSION['t_id']);
+$career_id = isset($_SESSION['career']);
 
 $errors = [];
 $success = [];
@@ -26,12 +27,12 @@ $career = $stmt->fetch(PDO::FETCH_ASSOC);
 // print_r($career);
 // die();
 
-if(isset($_POST['profile_update'])){
+if (isset($_POST['profile_update'])) {
     $id = $_POST['id'];
     $name = $_POST['name'];
     $photo = $_FILES['photos']['name'];
     $tmpName = $_FILES['photos']['tmp_name'];
-    move_uploaded_file($tmpName,"../images/technician/$photo");
+    move_uploaded_file($tmpName, "../images/technician/$photo");
     $specialization = $_POST['Specialization'];
     $aboutme = $_POST['aboutme'];
     $address = $_POST['Address'];
@@ -40,8 +41,8 @@ if(isset($_POST['profile_update'])){
     empty($specialization) ? $errors[] = "Specialization Required" : "";
     empty($aboutme) ? $errors[] = "About me required" : "";
     empty($address) ? $errors[] = "Address me required" : "";
- 
-    if(count($errors) == 0){
+
+    if (count($errors) == 0) {
         $updateTech = "UPDATE technicians SET name = :name, photos = :photos, Specialization = :specialization, aboutme = :aboutme, Address = :address WHERE TechnicianID = :id";
         $stmt = $pdo->prepare($updateTech);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -51,15 +52,17 @@ if(isset($_POST['profile_update'])){
         $stmt->bindParam(':aboutme', $aboutme, PDO::PARAM_STR);
         $stmt->bindParam(':address', $address, PDO::PARAM_STR);
         $result = $stmt->execute();
-        if($result){
+        if ($result) {
             $success[] = "Profile Updated Successfully";
             header("Location: profile.php?id=" . $id);
             exit();
         }
-        
     }
 }
 
+// echo $id;
+
+// echo $career_id;
 
 
 ?>
@@ -181,20 +184,24 @@ if(isset($_POST['profile_update'])){
                                     <li class="nav-item">
                                         <a class="nav-link" href="../logout.php">Logout</a>
                                     </li>
+                                    <?php 
+                                    // echo "db",$techician['TechnicianID'];
+                                    // echo "Session",$_SESSION['t_id'];
+                                    if ($techician['TechnicianID'] == $_SESSION['t_id']) : ?>
+
+                                        <li class="nav-item">
+                                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#profile">Edit</button>
+                                        </li>
+                                    <?php endif ?>
                                 <?php else: ?>
                                     <li class="nav-item">
                                         <a class="nav-link" href="../login.php?t=tech">Login</a>
                                     </li>
                                 <?php endif; ?>
 
-                                <?php if ($career): ?>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="profile/profile.php">Profile</a>
-                                    </li>
-                                <?php endif; ?>
+                                
                             </ul>
-                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#profile">Edit</button>
+
                         </div>
                     </nav>
                 </div>
@@ -264,7 +271,7 @@ if(isset($_POST['profile_update'])){
         include_once "../errors.php";
         include_once "./layout/card1.php";
         include_once "./layout/badges.php";
-        
+
 
         ?>
         <!-- card start -->
