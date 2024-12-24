@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 $auth = isset($_SESSION['name']);
 $career = isset($_SESSION['career']);
 
