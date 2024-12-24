@@ -5,6 +5,7 @@
 
     <!-- Page Wrapper -->
     <?php
+
     include './layout/page_wrapper.php';
     ?>
 
