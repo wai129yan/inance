@@ -9,43 +9,56 @@ $success = [];
 ?>
 
 <?php
-if(isset($_POST['create_service'])){
+if(isset($_GET['serviceID'])){
+    $serviceID = $_GET['serviceID'];
+
+    $sql = "SELECT * FROM services WHERE serviceID = :serviceID";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':serviceID', $serviceID, PDO::PARAM_INT);
+    $stmt->execute();
+    $service = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if(!$service){
+        $errors[] = "Service not found!";
+    }
+}else{
+    $errors[] = "Invalid service ID!";
+}
+
+
+if(isset($_POST['update_service'])){
     $name = $_POST['serviceName'];
-    $description  = $_POST['description'];
-    $basePrice  = $_POST['basePrice'];
+    $description = $_POST['description'];
+    $basePrice = $_POST['basePrice'];
     $duration = $_POST['duration'];
+    
 
-    empty($name) ? $errors[] = "Name Required" : "";
-    empty($description) ? $errors[] = "Description Required" : "";
-    empty($basePrice) ? $errors[] = "Base Price Required" : "";
-    empty($duration) ? $errors[] = "Duration Required" : "";
-
-    if(count($errors) == 0){
-        $serSql = "SELECT COUNT(*) FROM services WHERE serviceName = :name";
-        $stmt = $pdo->prepare($serSql);
-        $stmt->bindParam(':name',$name,PDO::PARAM_STR);
-        $stmt->execute();
-        $count = $stmt->fetchColumn();
-
-        if($count){
-            $errors[] = "Service Name Already Exists";
+    if(empty($name)){
+        $errors[] = "Service name is required!";
+    }
+    if(empty($description)){
+        $errors[] = "Description is required!";
+    }
+    if(empty($basePrice)){
+        $errors[] = "Base price is required!";
+    }
+    if(empty($duration)){
+        $errors[] = "Duration is required!";
+    }
+    if (count($errors) == 0){
+        $sql = "UPDATE services SET serviceName = :name, description = :description, basePrice = :basePrice, duration = :duration WHERE serviceID = :serviceID";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+        $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+        $stmt->bindParam(':basePrice', $basePrice, PDO::PARAM_STR);
+        $stmt->bindParam(':duration', $duration, PDO::PARAM_STR);
+        $stmt->bindParam(':serviceID', $serviceID, PDO::PARAM_INT);
+        if($stmt->execute()){
+            $success[] = "Service updated successfully!";
         }else{
-            $sql = "INSERT INTO services (serviceName,description,basePrice,duration) VALUES (:name,:description,:basePrice,:duration)";
-            $result = $pdo->prepare($sql);
-            $result->bindParam(':name',$name,PDO::PARAM_STR);
-            $result->bindParam(':description',$description,PDO::PARAM_STR);
-            $result->bindParam(':basePrice',$basePrice,PDO::PARAM_STR);
-            $result->bindParam(':duration',$duration,PDO::PARAM_STR);
-            $result->execute();
-            if($result){
-                $success[] = "Created Successfully";
-            }else{
-                $errors[] = "Failed to create the record.";
-            }
-
+            $errors[] = "Failed to update service!";
         }
     }
-
 }
 
 ?>
@@ -79,31 +92,33 @@ if(isset($_POST['create_service'])){
                         <!-- Form starts here -->
                         <h1 class="text-center fw-bold mb-4">Service Career</h1>
 
-                        <form action="create_service.php" class="row" method="post">
+                        <form action="" class="row" method="post">
                             <!-- Name Field -->
+                            <input type="hidden" name="id" value="<?= $service['serviceID']; ?>">
+
                             <div class="col-12">
                                 <label for="name" class="form-label"> Service Name</label>
-                                <input type="text" class="form-control" name="serviceName" value="" required>
+                                <input type="text" class="form-control" value="<?= $service['serviceName']; ?>"  name="serviceName" value="" required>
                             </div>
 
                             <!-- Description Field -->
                             <div class="col-12">
                                 <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" name="description" rows="3" required></textarea>
+                                <textarea class="form-control"  name="description" rows="3" required><?= $service['description']; ?></textarea>
                             </div>
 
                             <div class="col-12">
                                 <label for="basePrice">Base Price</label>
-                                <input type="number" class="form-control" id="basePrice" name="basePrice" step="0.01" required>
+                                <input type="number" class="form-control" id="basePrice"  value="<?= $service['basePrice']; ?>" name="basePrice" step="0.01" required>
                             </div>
 
                             <div class="col-12">
                                 <label for="duration">Duration (e.g. '1 hour', '30 minutes')</label>
-                                <input type="text" class="form-control" id="duration" name="duration" required>
+                                <input type="text" class="form-control" id="duration"value="<?= $service['duration']; ?>" name="duration" required>
                             </div>
                             
                             <div class="col-12 text-center mt-3">
-                                <input type="submit" name="create_service" value="Create Service" class="btn btn-success">
+                                <input type="submit" name="update_service" value="Update Service" class="btn btn-success">
                             </div>
                         </form>
                     </div>

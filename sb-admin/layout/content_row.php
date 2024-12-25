@@ -10,6 +10,13 @@ $stmt->execute();
 $totalCareers = $stmt->fetchColumn();
 ?>
 
+<?php
+$sql = "SELECT COUNT(*) FROM services";
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$totalServices = $stmt->fetchColumn();
+?>
+
 
 
 <div class="row">
@@ -19,7 +26,7 @@ $totalCareers = $stmt->fetchColumn();
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-md font-weight-bold text-primary text-uppercase mb-1">
+                        <div class="text-lg font-weight-bold text-primary text-uppercase mb-1">
                             Career Lists</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $totalCareers . " Careeries" ;?>  </div>
                     </div>
@@ -37,9 +44,9 @@ $totalCareers = $stmt->fetchColumn();
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                            Earnings (Annual)</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                        <div class="text-lg font-weight-bold text-success text-uppercase mb-1">
+                           Service Lists</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $totalServices . " Services" ;?></div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
