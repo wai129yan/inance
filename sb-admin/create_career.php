@@ -22,7 +22,7 @@
         $count = $stmt->fetchColumn();
 
         if ($count) {
-          $errors[] = "Career Already Exists";
+          $errors[] = "Career Name Already Exists";
         } else {
           $sql = "INSERT INTO careeries (name, description) VALUES (:name, :description)";
           $result = $pdo->prepare($sql);
