@@ -14,6 +14,7 @@
       $description = $_POST['description'];
       empty($name) ? $errors[] = "Name Required" : "";
       empty($description) ? $errors[] = "Description Required" : "";
+      
       if (count($errors) == 0) {
         $checkSql = "SELECT COUNT(*) FROM careeries WHERE name = :name";
         $stmt = $pdo->prepare($checkSql);
