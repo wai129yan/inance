@@ -36,7 +36,7 @@
                                 $stmt->execute([$technician['career_id']]);
                                 $career = $stmt->fetch(PDO::FETCH_ASSOC);
                                 ?>
-                                <?= $career['name'] ?>
+                                <?= $career['name']?? ""?>
                             </p>
                         </div>
                     </div>

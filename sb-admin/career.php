@@ -76,7 +76,7 @@
                                                     <td>
                                                         <a href="edit_career.php?career_id=<?php echo $career['career_id']; ?>" class="btn btn-info btn-sm">Edit</a>
 
-                                                        <a href="delete_career.php?career_id=<?php echo $career['career_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this career?');">Delete</a>
+                                                        <a href="delete_career.php?career_id=<?php echo $career['career_id']; ?>" class="btn btn-danger btn-sm swl-delete" >Delete</a>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>

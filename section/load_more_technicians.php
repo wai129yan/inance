@@ -22,25 +22,25 @@ foreach ($technicians as $technician) :
             </div>
             <div class="detail-box">
                 <h5>
-                    <?= $technician['name'] ?>
+                    <a href="../profile/profile.php?id=<?= $technician['TechnicianID']; ?>"><?= $technician['name'] ?></a>
                 </h5>
                 <p>
-                    <?= $technician['email'] ?>
+                    <?= $technician['email'] ?? "" ?>
                 </p>
                 <p>
-                    <?= $technician['Phone'] ?>
+                    <?= $technician['Phone'] ?? "" ?>
                 </p>
                 <p>
-                    <?= $technician['Address'] ?>
+                    <?= $technician['Address'] ?? "" ?>
                 </p>
                 <p>
-                    <?php 
+                    <?php
                     $sql = "SELECT * FROM careeries WHERE career_id = ?";
                     $stmt = $pdo->prepare($sql);
                     $stmt->execute([$technician['career_id']]);
                     $career = $stmt->fetch(PDO::FETCH_ASSOC);
                     ?>
-                    <?= $career['name'] ?>
+                    <?= $career['name'] ?? "" ?>
                 </p>
             </div>
         </div>

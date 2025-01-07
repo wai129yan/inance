@@ -71,11 +71,11 @@ $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <td><?php echo $service['serviceID']; ?></td>
                                                 <td><?php echo $service['serviceName']; ?></td>
                                                 <td><?php echo $service['description']; ?></td>
-                                                <td><?php echo $service['basePrice'] ; ?></td>
-                                                <td><?php echo $service['duration'] ; ?></td>
+                                                <td><?php echo $service['basePrice']; ?></td>
+                                                <td><?php echo $service['duration']; ?></td>
                                                 <td>
                                                     <a href="edit_service.php?serviceID=<?php echo $service['serviceID']; ?>" class="btn btn-info btn-sm">Edit</a>
-                                                    <a href="delete_service.php?serviceID=<?php echo $service['serviceID']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this career?');">Delete</a>
+                                                    <a href="delete_service.php?serviceID=<?php echo $service['serviceID']; ?>" class="btn btn-danger btn-sm swl-delete">Delete</a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

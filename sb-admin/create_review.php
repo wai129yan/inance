@@ -135,7 +135,7 @@ if (isset($_POST['create_review'])) {
                                 <label for="comment" class="form-label">Comment</label>
                                 <textarea class="form-control" name="comment" rows="3" required></textarea>
                             </div>
-                            
+                            <br><br>
                             <div class="col-12">
                                 <input type="datetime-local" class="form-control" name="date" value="" required>
                             </div>

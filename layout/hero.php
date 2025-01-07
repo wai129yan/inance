@@ -1,6 +1,8 @@
 <?php
-//session_start();
+session_start();
 $auth = isset($_SESSION['name']);
+// print_r($auth);
+// die();
 $career = isset($_SESSION['career']);
 
 include("./database/db.php");

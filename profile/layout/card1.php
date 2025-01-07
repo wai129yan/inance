@@ -4,10 +4,10 @@
             <img src="../../images/technician/<?= $techician['photos'] ?? 'client-1.jpg'; ?>" alt="Profile Image" class="w-100 h-100 object-fit-cover">
         </div>
         <div class="d-flex flex-column align-items-center ms-3">
-            <h3 class="m-3"><?= $techician['name'] ?></h3>
-            <p class="text-muted"><?= $career['name'] ?></p>
+            <h3 class="m-3"><?= $techician['name'] ?? "" ?></h3>
+            <p class="text-muted"><?= $career['name']?? ""?></p>
 
-            <a href="tel:+<?= $techician['Phone']; ?>" class="btn btn-info text-white">+ Contact Me</a>
+            <a href="tel:+<?= $techician['Phone']?? ""  ?>" class="btn btn-info text-white">+ Contact Me</a>
         </div>
         <div class="d-flex text-center align-items-center ms-5">
             <i class="fab fa-twitter  icon-hover me-2"></i>
@@ -17,7 +17,7 @@
         </div>
         <div class="d-flex text-center align-items-center ms-5">
 
-            <a href="mailto:<?= $techician['email']; ?>" class="btn btn-light">+ Send Message</a>
+            <a href="mailto:<?= $techician['email'] ?? ""; ?>" class="btn btn-light">+ Send Message</a>
         </div>
     </div>
 </div>
@@ -52,7 +52,7 @@
         <div class="card w-100 d-flex flex-column c-shadow">
             <div class="card-body">
                 <h5 class="card-title">Professional Bio</h5>
-                <p class="text-danger"><?= $career['description'] ?></p>
+                <p class="text-danger"><?= $career['description'] ?? ""?></p>
                 <p class="card-text">
 
                     An enthusiastic and detail-oriented Web Developer with over 5 years of experience in
