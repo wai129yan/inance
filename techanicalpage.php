@@ -1,0 +1,3 @@
+<!-- Fatal error: Uncaught PDOException: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row:
+  a foreign key constraint fails (`inance`.`reviews`, CONSTRAINT `Reviews_ibfk_2` FOREIGN KEY (`AppointmentID`) REFERENCES `appointments` (`AppointmentID`)) in C:\xampp\htdocs\inance\sb-admin\create_review.php:53 Stack trace: #0 C:\xampp\htdocs\inance\sb-admin\create_review.php(53):
+     PDOStatement->execute() #1 {main} thrown in C:\xampp\htdocs\inance\sb-admin\create_review.php on line 53 -->
