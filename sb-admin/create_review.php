@@ -62,7 +62,7 @@ if (isset($_POST['create_review'])) {
         $stmt->bindParam(':rating', $rating, PDO::PARAM_INT);
         $stmt->bindParam(':comment', $comment, PDO::PARAM_STR);
         $stmt->bindParam(':date', $date, PDO::PARAM_STR);
-        
+
         if ($stmt->execute()) {
             $success[] = "Review created successfully!";
         } else {
@@ -95,7 +95,7 @@ if (isset($_POST['create_review'])) {
                         include '../errors.php';
                         include '../success.php';
                         ?>
-                        
+
                         <!-- Form starts here -->
                         <h1 class="text-center fw-bold mb-4">Create Review</h1>
 
@@ -114,21 +114,12 @@ if (isset($_POST['create_review'])) {
                             <div class="col-12">
                                 <label for="rating" class="form-label">Rating</label><br>
 
-                                <input type="radio" name="rating" value="1" />
-                                <label for="star1" title="1 star" aria-label="1 star">☆</label>
-
-                                <input type="radio"  name="rating" value="2" />
-                                <label for="star2" title="2 stars" aria-label="2 stars">☆</label>
-
-                                <input type="radio"name="rating" value="3" />
-                                <label for="star3" title="3 stars" aria-label="3 stars">☆</label>
-
-                                <input type="radio"name="rating" value="4" />
-                                <label for="star4" title="4 stars" aria-label="4 stars">☆</label>
-
-                                <input type="radio" name="rating" value="5" />
-                                <label for="star5" title="5 stars" aria-label="5 stars">☆</label>
-
+                                <?php
+                                for ($i = 1; $i <= 5; $i++) {
+                                    echo '<input type="radio" id="star' . $i . '" name="rating" value="' . $i . '" />';
+                                    echo '<label for="star' . $i . '" title="' . $i . ' star' . ($i > 1 ? 's' : '') . '" aria-label="' . $i . ' star' . ($i > 1 ? 's' : '') . '">☆</label>';
+                                }
+                                ?>
                             </div>
 
                             <div class="col-12">
