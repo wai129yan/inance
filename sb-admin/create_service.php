@@ -77,7 +77,7 @@ if(isset($_POST['create_service'])){
                         include '../success.php';
                         ?>
                         <!-- Form starts here -->
-                        <h1 class="text-center fw-bold mb-4">Service Career</h1>
+                        <h1 class="text-center fw-bold mb-4">Create Service </h1>
 
                         <form action="create_service.php" class="row" method="post">
                             <!-- Name Field -->

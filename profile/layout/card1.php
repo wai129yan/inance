@@ -79,6 +79,10 @@
                     <span class="fs-5">Phone</span>
                     <span class="fs-5"><a class="text-decoration-none" href="tel:+<?= $techician['Phone']; ?>"><?= $techician['Phone'] ?></a></span>
                 </p>
+                <!-- <p class="card-text d-flex justify-content-between">
+                    <span class="fs-5">Career</span>
+                    <span class="fs-5"><= $techician[''] ?></span>
+                </p> -->
                 <p class="card-text d-flex justify-content-between">
                     <span class="fs-5">Specialization</span>
                     <span class="fs-5"><?= $techician['Specialization'] ?></span>
