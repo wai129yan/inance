@@ -1,6 +1,6 @@
 <?php
 include("./database/db.php");
-include ("helper/helperfunction.php");
+include("helper/helperfunction.php");
 
 $t = isset($_GET['t']);
 ?>
@@ -45,32 +45,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->execute();
             $exitUser = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if($exitUser){
+            if ($exitUser) {
                 $errors[] = "Email Already Exists";
-            }else{
-            $sql = "INSERT INTO technicians (name, email, password, Phone, career_id, Address, Specialization, techCode, RegistrationDate) VALUES (:name, :email, :password, :phone, :career_id, :address, :specialization, :techCode, :registerdate)";
-
-            $stmt = $pdo->prepare($sql);
-
-            $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-            $stmt->bindParam(':email', $email, PDO::PARAM_STR); 
-            $stmt->bindParam(':password', $password, PDO::PARAM_STR);
-            $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
-            $stmt->bindParam(':career_id', $career_id, PDO::PARAM_STR);
-            $stmt->bindParam(':address', $address, PDO::PARAM_STR);
-            $stmt->bindParam(':specialization', $specialization, PDO::PARAM_STR);
-            $stmt->bindParam(':techCode', $techCode, PDO::PARAM_STR);
-            $stmt->bindParam(':registerdate', $now, PDO::PARAM_STR);
-
-            if ($stmt->execute()) {
-                $success[] = "Success";
-                header("Location:login.php?t=tech");
             } else {
-                $errors[] = "Error message";
+                $sql = "INSERT INTO technicians (name, email, password, Phone, career_id, Address, Specialization, techCode, RegistrationDate) VALUES (:name, :email, :password, :phone, :career_id, :address, :specialization, :techCode, :registerdate)";
+
+                $stmt = $pdo->prepare($sql);
+
+                $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+                $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+                $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+                $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+                $stmt->bindParam(':career_id', $career_id, PDO::PARAM_STR);
+                $stmt->bindParam(':address', $address, PDO::PARAM_STR);
+                $stmt->bindParam(':specialization', $specialization, PDO::PARAM_STR);
+                $stmt->bindParam(':techCode', $techCode, PDO::PARAM_STR);
+                $stmt->bindParam(':registerdate', $now, PDO::PARAM_STR);
+
+                if ($stmt->execute()) {
+                    $success[] = "Success";
+                    header("Location:login.php?t=tech");
+                } else {
+                    $errors[] = "Error message";
+                }
             }
         }
     }
-}
 }
 
 // customer register data input
@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->execute();
             $custUser = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if($custUser){
+            if ($custUser) {
                 $errors[] = "Email Already Exists";
             } else {
                 $sql = "INSERT INTO customers (name,email,password,phone,address,created_date) VALUES (:name,:email,:password,:phone,:address,:registerdate)";
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt->bindParam(':address', $address, PDO::PARAM_STR);
                 $stmt->bindParam(':registerdate', $now, PDO::PARAM_STR);
 
-                if($stmt->execute()){
+                if ($stmt->execute()) {
                     $success[] = "Success";
                     header("Location:login.php");
                 } else {
@@ -128,7 +128,7 @@ include "success.php";
 
 <section class="contact_section layout_padding" id="contact">
     <div class="container">
-<?php include "errors.php"; ?>
+        <?php include "errors.php"; ?>
         <div class="row">
             <div class="col-md-6 px-4 py-4 shadow rounded-lg bg-light">
                 <!-- <h3 class="text-center mb-4">Register</h3> -->
@@ -147,20 +147,48 @@ include "success.php";
                         <div class="mb-3">
                             <input type="password" name="password" class="form-control" placeholder="password" required />
                         </div>
-                        
                         <div class="mb-3">
-                            <select name="career_id" id="" class="form-control">
+                            <?php
+                            // Ensure $selectedCareers is properly set; for now, initializing it as an empty array.
+                            $selectedCareers = isset($selectedCareers) ? $selectedCareers : [];
+                            ?>
+                            <label for="career" class="text-muted">Select Career</label>
+                            <select class="form-control js-multiple" multiple="multiple" name="career_id[]">
+                            
                                 <?php
+                                // Prepare the SQL query to fetch careers.
+                                $sql = "SELECT * FROM careeries";
+                                $stmt = $pdo->prepare($sql);
+                                $stmt->execute();
+                                $careers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                // Loop through the fetched careers and populate the select options.
+                                foreach ($careers as $career) :
+                                    // Check if the career_id is in the $selectedCareers array.
+                                    $selected = in_array($career['career_id'], $selectedCareers) ? 'selected' : '';
+                                ?>
+                                    <option value="<?= htmlspecialchars($career['career_id'], ENT_QUOTES, 'UTF-8') ?>" <?= $selected ?>>
+                                        <?= htmlspecialchars($career['name'], ENT_QUOTES, 'UTF-8') ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <br>
+
+
+                        <!-- <div class="mb-3">
+                            <select name="career_id" id="" class="form-control">
+                                <php
                                 $sql = "SELECT * FROM careeries";
                                 $stmt = $pdo->prepare($sql);
                                 $stmt->execute();
                                 $careers = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($careers as $career) :
                                 ?>
-                                    <option value="<?= $career['career_id'] ?>"><?= $career['name'] ?></option>
-                                <?php endforeach; ?>
+                                    <option value="<= $career['career_id'] ?>"><= $career['name'] ?></option>
+                                <php endforeach; ?>
                             </select>
-                        </div>
+                        </div> -->
 
                         <div class="mb-3">
                             <textarea name="Specialization" id="" placeholder="Specialization" class="form-control"></textarea>
@@ -226,4 +254,9 @@ include "success.php";
 <br><br><br><br><br>
 
 <?php include("./layout/footer.php") ?>;
-
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.js-multiple').select2();
+    });
+</script>
