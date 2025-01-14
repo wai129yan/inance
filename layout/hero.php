@@ -1,9 +1,10 @@
 <?php
-// session_start();
+session_start();
 $auth = isset($_SESSION['name']);
 // print_r($auth);
 // die();
 $career = isset($_SESSION['career']);
+$customer = isset($_SESSION['customer_id']);
 
 include("./database/db.php");
 ?>
@@ -19,7 +20,7 @@ include("./database/db.php");
                         <span>
                             Call : +81 09044540786
                         </span>
-                    </a>
+                    </a>m　　
                     <a href="">
                         <i class="fa fa-envelope" aria-hidden="true"></i>
                         <span>
@@ -58,6 +59,21 @@ include("./database/db.php");
                             <li class="nav-item">
                                 <a class="nav-link" href="#technicians">Technicians</a>
                             </li>
+
+                            <!-- <php if ($customer): ?>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="create_post.php">Create Post</a>
+                                </li>
+                            <php endif; ?> -->
+
+                            <?php if ($customer): ?>
+                                <!-- Show the 'Create Post' link if customer is logged in -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="create_post.php">Create Post</a>
+                                </li>
+                            <?php endif; ?>
+
+
                             <li class="nav-item">
                                 <a class="nav-link" href="#contact">Contact Us</a>
                             </li>
@@ -66,6 +82,9 @@ include("./database/db.php");
                                 <li class="nav-item">
                                     <a class="nav-link" href="logout.php">Logout</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href=""><?php echo $_SESSION['name']?></a>
+                                </li>
                             <?php else: ?>
                                 <li class="nav-item">
                                     <a class="nav-link" href="login.php?t=tech">Login</a>
@@ -73,9 +92,9 @@ include("./database/db.php");
                             <?php endif; ?>
 
                             <?php if ($career): ?>
-                        
+
                                 <li class="nav-item">
-                                    <a class="nav-link" href="profile/profile.php?id=<?=$_SESSION['t_id'];?>">Profile</a>
+                                    <a class="nav-link" href="profile/profile.php?id=<?= $_SESSION['t_id']; ?>">Profile</a>
                                 </li>
                             <?php endif; ?>
 
