@@ -20,15 +20,44 @@ if (isset($_POST['create_post'])) {
     $content = $_POST['content'];
     $address = $_POST['address'];
 
-    $photos = $_FILES['photo']["name"];
+    // $photos = $_FILES['photo']['name'];
+
+    // $savedPhotos = []; // Array to store names for the database
+
+    // foreach ($photos as $key => $photo) {
+    //     $tmpname = $_FILES['photo']['tmp_name'][$key];
+    //     $uniqueName = "photo_" . time() . "_" . $key . "_" . $photo; // Ensure uniqueness
+    //     move_uploaded_file($tmpname, "photos/$uniqueName");
+    //     $savedPhotos[] = $uniqueName; // Save the same name for database
+    // }
+
+    // // Save $savedPhotos to the database in JSON format
+    // $json_data = json_encode($savedPhotos);
+
+
+    $photos = $_FILES['photo']['name'];
+
+    $savedPhotos = []; // Array to store valid photo names for the database
+    $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp']; // Allowed file types
+
     foreach ($photos as $key => $photo) {
-    $tmpname = $_FILES["photo"]["tmp_name"][$key];
-    
-    $photoName = $_FILES["photo"]["name"][$key];
-    
+        $tmpname = $_FILES['photo']['tmp_name'][$key];
+        $extension = strtolower(pathinfo($photo, PATHINFO_EXTENSION)); // Get file extension
+
+        if (in_array($extension, $allowedExtensions)) {
+            $uniqueName = "photo_" . time() . "_" . $key . "." . $extension; // Unique file name
+            move_uploaded_file($tmpname, "photos/$uniqueName");
+            $savedPhotos[] = $uniqueName; // Add valid photo name to the database array
+        } else {
+            // Optionally handle invalid files
+            $errors[] = "Invalid file type: $photo. Only jpg, jpeg, png, and webp are allowed.<br>";
+        }
     }
-    // die();
-    // print_r($photo);
+
+    $photoNamesForDatabase = json_encode($savedPhotos);
+
+
+    // echo $json_data;
     // die();
 
     // Validate inputs
@@ -60,17 +89,20 @@ if (isset($_POST['create_post'])) {
         $stmt->execute();
         $count = $stmt->fetchColumn();
 
+
+
         if (!$count) {
             $errors[] = "Customer ID does not exist";
         } else {
             // Insert new post into the database
-            $sql = "INSERT INTO posts (customer_id, title, phone, content, address) 
-                    VALUES (:customer_id, :title, :phone, :content, :address)";
+            $sql = "INSERT INTO posts (customer_id, title, phone, content, photo,address) 
+                    VALUES (:customer_id, :title, :phone, :content, :photo,:address)";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':customer_id', $customer_id);
             $stmt->bindParam(':title', $title);
             $stmt->bindParam(':phone', $phone);
             $stmt->bindParam(':content', $content);
+            $stmt->bindParam(':photo', $json_data);
             $stmt->bindParam(':address', $address);
 
             if ($stmt->execute()) {

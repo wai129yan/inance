@@ -81,11 +81,11 @@ include("./layout/header.php");
                         <hr class="bg-danger  w-100">
                     </div>
                     <div class="text-center pb-3 mt-3">
-                        <?php if ($t): ?>
-                            <a href="register.php?t=<?= $tech ?>" class="btn btn-success">Register</a>
-                        <?php else: ?>
+                        
+                            <a href="register.php?t=<?= true ?>" class="btn btn-success">Techinician Register</a>
+                        
                             <a href="register.php" class="btn btn-success">Register</a>
-                        <?php endif ?>
+                        
                     </div>
                 </form>
             </div>

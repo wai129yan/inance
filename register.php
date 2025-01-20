@@ -18,6 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $password = password_hash($password, PASSWORD_DEFAULT);
         $phone = $_POST['Phone'];
         $career_id = $_POST['career_id'];
+        $career_id = json_encode($career_id);
+        echo ($career_id);
+        die();
         $address = $_POST['Address'];
         $specialization = $_POST['Specialization'];
         $sql = "SELECT techCode FROM technicians ORDER BY techCode DESC LIMIT 1";

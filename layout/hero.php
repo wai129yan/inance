@@ -20,7 +20,7 @@ include("./database/db.php");
                         <span>
                             Call : +81 09044540786
                         </span>
-                    </a>m　　
+                    </a>　
                     <a href="">
                         <i class="fa fa-envelope" aria-hidden="true"></i>
                         <span>
@@ -78,25 +78,36 @@ include("./database/db.php");
                                 <a class="nav-link" href="#contact">Contact Us</a>
                             </li>
 
-                            <?php if ($auth): ?>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="logout.php">Logout</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href=""><?php echo $_SESSION['name']?></a>
-                                </li>
-                            <?php else: ?>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="login.php?t=tech">Login</a>
-                                </li>
-                            <?php endif; ?>
-
                             <?php if ($career): ?>
-
                                 <li class="nav-item">
                                     <a class="nav-link" href="profile/profile.php?id=<?= $_SESSION['t_id']; ?>">Profile</a>
                                 </li>
                             <?php endif; ?>
+
+                            <?php if ($auth): ?>
+                                <li class="nav-item">
+                                    <a class="nav-link" href=""><?php echo $_SESSION['name'] ?></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="logout.php">Logout</a>
+                                </li>
+
+                            <?php else: ?>
+                                <li class="nav-item">
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Log In Here
+                                        </button>
+
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="login.php?t=tech">Technicians LogIn</a>
+                                            <a class="dropdown-item" href="login.php">Customer Login</a>
+                                        </div>
+                                    </div>
+                                </li>
+
+                            <?php endif ?>
+
 
                         </ul>
                     </div>
