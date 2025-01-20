@@ -54,8 +54,10 @@ if (isset($_POST['create_post'])) {
         }
     }
 
-    $photoNamesForDatabase = json_encode($savedPhotos);
+    $photoDB= json_encode($savedPhotos);
 
+
+    // echo $photoNamesForDatabase;
 
     // echo $json_data;
     // die();
@@ -102,7 +104,7 @@ if (isset($_POST['create_post'])) {
             $stmt->bindParam(':title', $title);
             $stmt->bindParam(':phone', $phone);
             $stmt->bindParam(':content', $content);
-            $stmt->bindParam(':photo', $json_data);
+            $stmt->bindParam(':photo', $photoDB);
             $stmt->bindParam(':address', $address);
 
             if ($stmt->execute()) {
@@ -162,7 +164,7 @@ if (isset($_POST['create_post'])) {
                     <!-- Phone Number Field -->
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone Number<span class="text-danger">*</span></label>
-                        <input type="tel" name="phone" class="form-control" placeholder="Enter your phone number" required />
+                        <input type="text" name="phone" class="form-control" placeholder="Enter your phone number" required />
                     </div>
 
                     <div class="mb-3">
