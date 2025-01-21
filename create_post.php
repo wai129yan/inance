@@ -109,6 +109,7 @@ if (isset($_POST['create_post'])) {
 
             if ($stmt->execute()) {
                 $success[] = "Post created successfully!";
+                header("Location:post_view.php");
             } else {
                 $errors[] = "An error occurred while creating the post";
             }
