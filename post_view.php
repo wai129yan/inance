@@ -26,6 +26,39 @@ $cus->execute();
 $currentCus = $cus->fetch();
 // print_r($currentCus);
 
+if (isset($_POST['customUpdate'])) {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
+    $customerid = $_POST['customerid'];
+
+    $photo = $_FILES['photo']['name'] ?? [];
+    $tmpname = $_FILES['photo']['tmp_name'];
+    $extension = strtolower(pathinfo($photo, PATHINFO_EXTENSION));
+    $uniqueName = "photo_" . time() . "." . $extension;
+    move_uploaded_file($tmpname, "customerPhotos/$uniqueName");
+
+    $sql = "UPDATE customers SET name = :name, email = :email, phone = :phone, address = :address, photo = :photo WHERE CustomerID = :customerid";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':name', $name);
+    $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':phone', $phone);
+    $stmt->bindParam(':address', $address);
+    $stmt->bindParam(':photo', $uniqueName);
+    $stmt->bindParam(':customerid', $customerid);
+
+    if ($stmt->execute()) {
+        $success[] = "Customer updated successfully!";
+        header("Location:post_view.php");
+    } else {
+        $errors[] = "An error occurred while updating the customer";
+    }
+}
+
+
+
+
 
 ?>
 
@@ -109,18 +142,6 @@ include("./layout/hero2.php");
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         <?php if (!empty($posts)): ?>

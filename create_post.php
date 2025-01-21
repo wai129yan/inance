@@ -168,9 +168,15 @@ if (isset($_POST['create_post'])) {
                         <input type="text" name="phone" class="form-control" placeholder="Enter your phone number" required />
                     </div>
 
+
+
+                    <div id="imageContainer">
+                            <img id="preview" style="display:none;" width="150" alt="Image Preview">
+                    </div>
+
                     <div class="mb-3">
                         <label for="photo" class="form-label">Photo</label>
-                        <input type="file" class="form-control" accept="image/*" multiple name="photo[]">
+                        <input type="file" class="form-control" accept="image/*" multiple name="photo[]" id="cusphoto">
                     </div>
 
                     <!-- Content Field -->
@@ -199,3 +205,38 @@ if (isset($_POST['create_post'])) {
         </div>
     </div>
 </section>
+
+<script>
+    // Get the file input element
+    const fileInput = document.getElementById('cusphoto');
+
+    // Get the image preview element
+    const imagePreview = document.getElementById('preview');
+
+    // Event listener for file input change
+    fileInput.addEventListener('change', function() {
+        // console.log(this.files);
+        const file = this.files[0]; // Get the selected file
+
+        if (file) {
+            // Create a FileReader object
+            const reader = new FileReader();
+            // console.log(reader);
+            // Define what happens when the file is loaded
+            reader.onload = function() {
+                // console.log(this.result);
+                // Set the image src to the file URL
+                imagePreview.src = this.result;
+
+                // Show the image
+                imagePreview.style.display = 'block';
+            }
+
+            // Read the file as a data URL (base64)
+            reader.readAsDataURL(file);
+        } else {
+            // Hide the image if no file is selected
+            imagePreview.style.display = 'none';
+        }
+    });
+</script>
