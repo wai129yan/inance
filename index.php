@@ -74,6 +74,7 @@ include "layout/hero.php";
 <!-- feature section -->
 <?php
 include "section/feature.php";
+include "section/job_offer.php";
 include "section/info.php";
 include "section/contact.php";
 include "section/about.php";

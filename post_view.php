@@ -56,10 +56,6 @@ if (isset($_POST['customUpdate'])) {
     }
 }
 
-
-
-
-
 ?>
 
 
@@ -81,10 +77,10 @@ include("./layout/hero2.php");
         </div> -->
 
 
-        <div class="card" style="width:18rem">
+        <div class="card" style="min-width:18rem ; max-width:20rem">
 
-            <img src="./customerPhotos/640px-Smiley.svg.png" class="object-fit-cover m-auto" alt="..." width="100" height="100">
-            <div class="card-body">
+            <img src="./customerPhotos/<?php echo $currentCus['photo'] ?? 'dummy.png' ?>" class="object-fit-cover m-auto rounded-circle" alt="..." width="100" height="100" style="transform:translateY(-50%)" ;>
+            <div class="card-body" style="margin-top:-60px" ;>
 
                 <h5 class="card-title">Name- <?= $currentCus['name'] ?> </h5>
                 <h5 class="card-title">Email- <?= $currentCus['email'] ?> </h5>
@@ -93,8 +89,7 @@ include("./layout/hero2.php");
             </div>
             <a class="btn btn-success" data-toggle="modal" data-target="#customer">Edit</a>
         </div>
-        <!-- Button trigger modal -- 
-
+        
         <!-- Modal -->
         <div class="modal fade" id="customer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -145,7 +140,7 @@ include("./layout/hero2.php");
 
 
         <?php if (!empty($posts)): ?>
-            <table class="table table-striped table-bordered">
+            <table class="table table-striped table-bordered m-3">
                 <thead>
                     <tr>
                         <th>Title</th>
@@ -224,3 +219,33 @@ include("./layout/hero2.php");
         }
     });
 </script>
+
+
+
+<!-- <php
+// Sample array
+$array = [
+    ['Name', 'Age', 'Location'],
+    ['Alice', 30, 'New York'],
+    ['Bob', 25, 'Los Angeles'],
+    ['Charlie', 35, 'Chicago']
+];
+
+// Open a file in write mode (this will create or overwrite the file)
+$file = fopen('output.csv', 'w');
+
+// Check if the file was opened successfully
+if ($file === false) {
+    die('Error opening the file');
+}
+
+// Loop through the array and write each row to the CSV file
+foreach ($array as $row) {
+    fputcsv($file, $row); // Writes the row to the CSV file
+}
+
+// Close the file after writing
+fclose($file);
+
+echo 'CSV file created successfully!';
+> -->
