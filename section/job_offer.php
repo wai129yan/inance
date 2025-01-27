@@ -5,11 +5,14 @@
         </div>
         <div class="row" id="customerPosts">
             <?php
-            $sql = "SELECT * FROM posts limit 3";
+            // $sql = "SELECT * FROM posts limit 3";
+            // $sql = "SELECT * FROM posts ORDER BY created_at DESC LIMIT 5";
+            $sql = "SELECT * FROM posts ORDER BY RAND() LIMIT 5";
+
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
             $customerPosts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            // print_r($customerPosts);
+            //print_r($customerPosts);
             ?>
 
             <?php foreach ($customerPosts as $customerPost) : ?>
@@ -20,21 +23,15 @@
                         </div>
                         <div class="detail-box">
                             <h5>
-                                <a href="../profile/profile.php?id=<?= $customerPost['id'];?>"><?= $customerPost['title'] ?></a>
+                                <a href="./job_detail.php?id=<?= $customerPost['id']; ?>"><?= $customerPost['title'] ?></a>
                             </h5>
                             <p>
                                 <?= $customerPost['content'] ?>
                             </p>
-                          
-                            <!-- <p>
-                                <php
-                                $sql = "SELECT * FROM careeries WHERE career_id = ? ";
-                                $stmt = $pdo->prepare($sql);
-                                $stmt->execute([$customerPost['career_id']]);
-                                $career = $stmt->fetch(PDO::FETCH_ASSOC);
-                                ?>
-                                <= $career['name']?? ""?>
-                            </p> -->
+                            <p>
+                                $ <?= $customerPost['price'] ?>
+                            </p>
+                            
                         </div>
                     </div>
                 </div>
@@ -50,13 +47,13 @@
                     $("#loadMore").click(function() {
                         let offset = $(this).data("offset");
                         $.ajax({
-                            url: "/section/load_more_technicians.php",
+                            url: "/section/load_more_posts.php",
                             type: "POST",
                             data: {
                                 offset: offset
                             },
                             success: function(response) {
-                                console.log(response);
+                                console.log(response); // For debugging
                                 $("#customerPosts").append(response);
                                 $("#loadMore").data("offset", offset + 3);
                             }

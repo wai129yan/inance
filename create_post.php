@@ -18,6 +18,7 @@ if (isset($_POST['create_post'])) {
     $title = $_POST['title'];
     $phone = $_POST['phone'];
     $content = $_POST['content'];
+    $price = $_POST['price'];
     $address = $_POST['address'];
 
     // $photos = $_FILES['photo']['name'];
@@ -54,7 +55,7 @@ if (isset($_POST['create_post'])) {
         }
     }
 
-    $photoDB= json_encode($savedPhotos);
+    $photoDB = json_encode($savedPhotos);
 
 
     // echo $photoNamesForDatabase;
@@ -97,13 +98,14 @@ if (isset($_POST['create_post'])) {
             $errors[] = "Customer ID does not exist";
         } else {
             // Insert new post into the database
-            $sql = "INSERT INTO posts (customer_id, title, phone, content, photo,address) 
-                    VALUES (:customer_id, :title, :phone, :content, :photo,:address)";
+            $sql = "INSERT INTO posts (customer_id, title, phone, content,price, photo,address) 
+                    VALUES (:customer_id, :title, :phone, :content, :price, :photo,:address)";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':customer_id', $customer_id);
             $stmt->bindParam(':title', $title);
             $stmt->bindParam(':phone', $phone);
             $stmt->bindParam(':content', $content);
+            $stmt->bindParam((':price'), $price);
             $stmt->bindParam(':photo', $photoDB);
             $stmt->bindParam(':address', $address);
 
@@ -171,7 +173,7 @@ if (isset($_POST['create_post'])) {
 
 
                     <div id="imageContainer">
-                            <img id="preview" style="display:none;" width="150" alt="Image Preview">
+                        <img id="preview" style="display:none;" width="150" alt="Image Preview">
                     </div>
 
                     <div class="mb-3">
@@ -181,8 +183,13 @@ if (isset($_POST['create_post'])) {
 
                     <!-- Content Field -->
                     <div class="mb-3">
-                        <label for="content" class="form-label">Description</label>
+                        <label for="content" class="form-label">Content</label>
                         <textarea name="content" class="form-control" placeholder="Enter Your Content" rows="3"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="number" name="price" class="form-control" placeholder="Enter Price" step="0.01" min="0">
                     </div>
 
                     <!-- Address Field -->

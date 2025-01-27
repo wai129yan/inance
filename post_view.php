@@ -30,6 +30,7 @@ if (isset($_POST['customUpdate'])) {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
+    $price = $_POST['price'];
     $address = $_POST['address'];
     $customerid = $_POST['customerid'];
 
@@ -39,11 +40,12 @@ if (isset($_POST['customUpdate'])) {
     $uniqueName = "photo_" . time() . "." . $extension;
     move_uploaded_file($tmpname, "customerPhotos/$uniqueName");
 
-    $sql = "UPDATE customers SET name = :name, email = :email, phone = :phone, address = :address, photo = :photo WHERE CustomerID = :customerid";
+    $sql = "UPDATE customers SET name = :name, email = :email, phone = :phone, price = :price, address = :address, photo = :photo WHERE CustomerID = :customerid";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':name', $name);
     $stmt->bindParam(':email', $email);
     $stmt->bindParam(':phone', $phone);
+    $stmt->bindParam(':price', $price);
     $stmt->bindParam(':address', $address);
     $stmt->bindParam(':photo', $uniqueName);
     $stmt->bindParam(':customerid', $customerid);
@@ -116,6 +118,11 @@ include("./layout/hero2.php");
                                 <input class="form-control" type="text" name="phone" value="<?php echo  $currentCus['phone'] ?>">
                             </div>
 
+                            <div class="mb-3">
+                                <label for="price">Price</label>
+                                <input class="form-control" type="text" name="price" value="<?php echo  $currentCus['price'] ?>">
+                            </div>
+
                             <div id="imageContainer">
                                 <img id="preview" style="display:none;" width="150" alt="Image Preview">
                             </div>
@@ -145,6 +152,7 @@ include("./layout/hero2.php");
                     <tr>
                         <th>Title</th>
                         <th>Phone</th>
+                        <th>Price</th>
                         <th>Address</th>
                         <th>Content</th>
                         <th>Photos</th>
@@ -156,6 +164,7 @@ include("./layout/hero2.php");
                         <tr>
                             <td><?php echo htmlspecialchars($post['title']); ?></td>
                             <td><?php echo htmlspecialchars($post['phone']); ?></td>
+                            <td><?php echo htmlspecialchars($post['price']); ?></td>
                             <td><?php echo htmlspecialchars($post['address']); ?></td>
                             <td><?php echo nl2br(htmlspecialchars($post['content'])); ?></td>
                             <td>

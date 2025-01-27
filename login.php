@@ -31,11 +31,11 @@ if(isset($_POST['Login'])){
 
     if(count($errors) == 0){
         if($email === $user['email'] && password_verify($password, $user['password'])){
-            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_id'] = $user['id']?? "";
             $_SESSION['name'] = $user['name'];
-            $_SESSION['customer_id'] = $user['CustomerID'];
-            $_SESSION['career'] = $user['career_id'];
-            $_SESSION['t_id'] = $user['TechnicianID'];
+            $_SESSION['customer_id'] = $user['CustomerID'] ?? "";
+            $_SESSION['career'] = $user['career_id'] ?? "";
+            $_SESSION['t_id'] = $user['TechnicianID']?? "";
             header("Location:index.php");
             exit();
         }

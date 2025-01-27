@@ -31,6 +31,7 @@ if (isset($_POST['update'] )) {
     $title = $_POST['title'];
     $phone = $_POST['phone'];
     $content = $_POST['content'];
+    $price = $_POST['price'];
     $address = $_POST['address'];
     $new_photos = $_FILES['photo']['name'] ?? [];
 
@@ -59,15 +60,17 @@ if (isset($_POST['update'] )) {
     if (empty($title)) $errors[] = "Title is required.";
     if (empty($phone)) $errors[] = "Phone number is required.";
     if (empty($content)) $errors[] = "Content is required.";
+    if (empty($price)) $errors[] = "Price is required.";
     if (empty($address)) $errors[] = "Address is required.";
 
     if (empty($errors)) {
         // Update the post in the database
-        $sql = "UPDATE posts SET title = :title, phone = :phone, content = :content, photo = :photo, address = :address WHERE id = :id AND customer_id = :customer_id";
+        $sql = "UPDATE posts SET title = :title, phone = :phone, content = :content, price = :price, photo = :photo, address = :address WHERE id = :id AND customer_id = :customer_id";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':title', $title);
         $stmt->bindParam(':phone', $phone);
         $stmt->bindParam(':content', $content);
+        $stmt->bindParam(':price', $price);
         $stmt->bindParam(':photo', $photoDB);
         $stmt->bindParam(':address', $address);
         $stmt->bindParam(':id', $post_id);
@@ -145,6 +148,11 @@ include './layout/header.php';
                 <div class="mb-3">
                     <label for="content" class="form-label">Content</label>
                     <textarea name="content" class="form-control" rows="3"><?php echo htmlspecialchars($post['content']); ?></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="text" name="price" class="form-control" value="<?php echo htmlspecialchars($post['price']); ?>" required>
                 </div>
 
                 <div class="mb-3">
