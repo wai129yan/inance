@@ -51,7 +51,7 @@ if (isset($_POST['create_post'])) {
             $savedPhotos[] = $uniqueName; // Add valid photo name to the database array
         } else {
             // Optionally handle invalid files
-            $errors[] = "Invalid file type: $photo. Only jpg, jpeg, png, and webp are allowed.<br>";
+            // $errors[] = "Invalid file type: $photo. Only jpg, jpeg, png, and webp are allowed.<br>";
         }
     }
 

@@ -22,11 +22,11 @@
                             <img src="./customerPhotos/<?= $customerPost['photo'] ?? 'dummy.png' ?>" alt="photo" />
                         </div>
                         <div class="detail-box">
-                            <h5>
-                                <a href="./job_detail.php?id=<?= $customerPost['id']; ?>"><?= $customerPost['title'] ?></a>
-                            </h5>
+                            <a href="./job_detail.php?id=<?= $customerPost['id']; ?>">
+                                <?= strlen($customerPost['title']) > 20 ? substr($customerPost['title'], 0, 20) . '...' : $customerPost['title']; ?>
+                            </a>
                             <p>
-                                <?= $customerPost['content'] ?>
+                                <?= strlen($customerPost['content']) > 20 ? substr($customerPost['content'], 0, 20) . '...' : $customerPost['content']; ?>
                             </p>
                             <p>
                                 $ <?= $customerPost['price'] ?>

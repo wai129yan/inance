@@ -48,11 +48,12 @@ if (isset($_POST['update'] )) {
                 $uniqueName = "photo_" . time() . "_" . $key . "." . $extension;
                 move_uploaded_file($tmpname, "photos/$uniqueName");
                 $savedPhotos[] = $uniqueName;
-            } else {
-                $errors[] = "Invalid file type: $photo. Only jpg, jpeg, png, and webp are allowed.";
+            // } else {
+            //     $errors[] = "Invalid file type: $photo. Only jpg, jpeg, png, and webp are allowed.";
+            // }
             }
         }
-    }
+    } 
 
     $photoDB = json_encode($savedPhotos);
 
@@ -170,3 +171,4 @@ include './layout/header.php';
 
 <?php include("./layout/footer.php"); ?>
 
+                        

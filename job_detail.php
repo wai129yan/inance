@@ -58,7 +58,29 @@ include("./layout/hero2.php");
             </div>
         </section>
     </div>
-    <div class="col-md-4">
 
+    <div class="col-md-4 ms-auto">
+        <div class="d-flex flex-column flex-md-col  justify-content-around align-items-center py-5">
+            <!-- Related Item 1 -->
+            <div class="related-item text-center mb-4 mb-md-0">
+                <img src="./customerPhotos/<?php $post['photo'] ?? 'dummy.png'?>" alt="Related 1" class="img-fluid rounded-circle" style="width: 100px; height: 100px;">
+                <p class="mt-2"><strong>Related Job 1</strong> $<?= $price; ?></p>
+                <p>$100</p>
+            </div>
+
+            <!-- Related Item 2 -->
+            <div class="related-item text-center mb-4 mb-md-0">
+                <img src="./customerPhotos/related2.jpg" alt="Related 2" class="img-fluid rounded-circle" style="width: 100px; height: 100px;">
+                <p class="mt-2"><strong>Related Job 2</strong></p>
+                <p>$150</p>
+            </div>
+
+            <!-- Related Item 3 -->
+            <div class="related-item text-center">
+                <img src="./customerPhotos/related3.jpg" alt="Related 3" class="img-fluid rounded-circle" style="width: 100px; height: 100px;">
+                <p class="mt-2"><strong>Related Job 3</strong></p>
+                <p>$200</p>
+            </div>
+        </div>
     </div>
 </div>

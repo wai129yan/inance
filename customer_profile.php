@@ -91,7 +91,7 @@ include("./layout/hero2.php");
             </div>
             <a class="btn btn-success" data-toggle="modal" data-target="#customer">Edit</a>
         </div>
-        
+
         <!-- Modal -->
         <div class="modal fade" id="customer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -162,11 +162,40 @@ include("./layout/hero2.php");
                 <tbody>
                     <?php foreach ($posts as $post): ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($post['title']); ?></td>
+                            <td>
+                                <?php
+                                // Limit title to 20 characters
+                                $maxLength = 20; // Maximum length for the truncated title
+                                $title = htmlspecialchars($post['title']); // Sanitize the title
+                                $limitedTitle = substr($title, 0, $maxLength); // Truncate the title to 20 characters
+
+                                // Add an ellipsis (...) if the title exceeds the max length
+                                if (strlen($title) > $maxLength) {
+                                    $limitedTitle .= '...'; // Append ellipsis for truncated titles
+                                }
+
+                                echo $limitedTitle; // Display the truncated title
+
+                                // If the title exceeds the max length, show a "Details" link
+                                if (strlen($title) > $maxLength): ?>
+                                    <br><a href="edit_post.php?id=<?php echo $post['id']; ?>" class="btn btn-link">Details</a>
+                                <?php endif; ?>
+                            </td>
                             <td><?php echo htmlspecialchars($post['phone']); ?></td>
                             <td><?php echo htmlspecialchars($post['price']); ?></td>
                             <td><?php echo htmlspecialchars($post['address']); ?></td>
-                            <td><?php echo nl2br(htmlspecialchars($post['content'])); ?></td>
+                            <td>
+                                <?php
+                                // Limit content to 20 words
+                                $words = explode(' ', strip_tags($post['content'])); // Remove HTML tags and split by spaces
+                                $limitedContent = implode(' ', array_slice($words, 0, 10)); // Get the first 20 words
+                                echo nl2br(htmlspecialchars($limitedContent)); // Display the truncated content
+
+                                // If the content has more than 20 words, show a "Details" link
+                                if (count($words) > 10): ?>
+                                    <br><a href="edit_post.php?id=<?php echo $post['id']; ?>" class="btn btn-link">Details</a>
+                                <?php endif; ?>
+                            </td>
                             <td>
                                 <?php if (!empty($post['photo'])): ?>
                                     <?php
