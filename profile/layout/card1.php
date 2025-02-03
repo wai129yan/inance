@@ -1,13 +1,13 @@
-<div class="row d-flex justify-content-center custom p-5">
+<!-- <div class="row d-flex justify-content-center custom p-5">
     <div class=" d-flex text-center">
         <div class="rounded-circle overflow-hidden profile-image">
             <img src="../../images/technician/<?= $techician['photos'] ?? 'client-1.jpg'; ?>" alt="Profile Image" class="w-100 h-100 object-fit-cover">
         </div>
         <div class="d-flex flex-column align-items-center ms-3">
             <h3 class="m-3"><?= $techician['name'] ?? "" ?></h3>
-            <p class="text-muted"><?= $career['name']?? ""?></p>
+            <p class="text-muted"><?= $career['name'] ?? "" ?></p>
 
-            <a href="tel:+<?= $techician['Phone']?? ""  ?>" class="btn btn-info text-white">+ Contact Me</a>
+            <a href="tel:+<?= $techician['Phone'] ?? ""  ?>" class="btn btn-info text-white">+ Contact Me</a>
         </div>
         <div class="d-flex text-center align-items-center ms-5">
             <i class="fab fa-twitter  icon-hover me-2"></i>
@@ -20,8 +20,8 @@
             <a href="mailto:<?= $techician['email'] ?? ""; ?>" class="btn btn-light">+ Send Message</a>
         </div>
     </div>
-</div>
-<div class="row mt-5">
+</div> -->
+<!-- <div class="row mt-5">
     <div class="d-flex justify-content-between align-items-center w-100 ">
         <h5 class="fw-bold">My Score Skills : </h5>
         <p class="custom-shadow p-2 mb-2 fs-5">
@@ -46,13 +46,54 @@
             Good In languages
         </p>
     </div>
+</div> -->
+
+<div class="container">
+    <div class="profile-card">
+        <h2>Jane Smith</h2>
+        <p>Full Stack Developer with a passion for creating beautiful and functional web applications.</p>
+        <div class="skills-container">
+            <div class="skills-item">
+                <h4>HTML</h4>
+                <div class="star-rating">
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                </div>
+            </div>
+            <div class="skills-item">
+                <h4>CSS</h4>
+                <div class="star-rating">
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">☆</span>
+                </div>
+            </div>
+            <div class="skills-item">
+                <h4>JavaScript</h4>
+                <div class="star-rating">
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                </div>
+            </div>
+        </div>
+        <button class="button">View Portfolio</button>
+    </div>
 </div>
+
 <div class="row mt-5">
     <div class="col-md-7 d-flex">
         <div class="card w-100 d-flex flex-column c-shadow">
             <div class="card-body">
                 <h5 class="card-title">Professional Bio</h5>
-                <p class="text-danger"><?= $career['description'] ?? ""?></p>
+                <p class="text-danger"><?= $career['description'] ?? "" ?></p>
                 <p class="card-text">
 
                     An enthusiastic and detail-oriented Web Developer with over 5 years of experience in
