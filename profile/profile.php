@@ -130,6 +130,76 @@ if (isset($_POST['profile_update'])) {
             font-weight: bold;
             color: #61b7da;
         }
+
+
+
+
+        body {
+            background-color: #e0ffff;
+            font-family: sans-serif;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .profile-card {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .profile-title {
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .social-icons {
+            margin-bottom: 20px;
+        }
+
+        .social-icon {
+            margin: 0 10px;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .button {
+            background-color: #00bfff;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #009acd;
+        }
+    
+
+
+
+
     </style>
 </head>
 
@@ -184,7 +254,7 @@ if (isset($_POST['profile_update'])) {
                                     <li class="nav-item">
                                         <a class="nav-link" href="../logout.php">Logout</a>
                                     </li>
-                                    <?php 
+                                    <?php
                                     // echo "db",$techician['TechnicianID'];
                                     // echo "Session",$_SESSION['t_id'];
                                     if ($techician['TechnicianID'] == $_SESSION['t_id']) : ?>
@@ -199,11 +269,27 @@ if (isset($_POST['profile_update'])) {
                                     </li>
                                 <?php endif; ?>
 
-                                
+
                             </ul>
 
                         </div>
                     </nav>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="profile-section">
+                    <div class="profile-card">
+                        <img src="https://via.placeholder.com/150" alt="Profile Image" class="profile-img">
+                        <h2 class="profile-name">John Doe</h2>
+                        <p class="profile-title">Web Developer</p>
+                        <div class="social-icons">
+                            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                        <button class="button">Contact Me</button>
+                    </div>
                 </div>
             </div>
             <!-- Button trigger modal -->

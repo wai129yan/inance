@@ -7,7 +7,7 @@
             <?php
             // $sql = "SELECT * FROM posts limit 3";
             // $sql = "SELECT * FROM posts ORDER BY created_at DESC LIMIT 5";
-            $sql = "SELECT * FROM posts ORDER BY RAND() LIMIT 5";
+            $sql = "SELECT * FROM posts ORDER BY RAND() LIMIT 3";
 
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
@@ -19,7 +19,7 @@
                 <div class="col-sm-6 col-md-4 mx-auto">
                     <div class="box ">
                         <div class="img-box">
-                            <img src="./customerPhotos/<?= $customerPost['photo'] ?? 'client-1.jpg' ?>" alt="photo" />
+                            <img src="./customerPhotos/<?= $customerPost['photo'] ?? 'dummy.png' ?>" alt="photo" />
                         </div>
                         <div class="detail-box">
                             <h5>
@@ -31,20 +31,20 @@
                             <p>
                                 $ <?= $customerPost['price'] ?>
                             </p>
-                            
+
                         </div>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
         <div class="btn-box">
-            <button class="btn btn-primary" id="loadMore" data-offset="3">
+            <button class="btn btn-primary" id="load" data-offset="3">
                 View More
             </button>
             <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
             <script>
                 $(document).ready(function() {
-                    $("#loadMore").click(function() {
+                    $("#load").click(function() {
                         let offset = $(this).data("offset");
                         $.ajax({
                             url: "/section/load_more_posts.php",
@@ -55,7 +55,7 @@
                             success: function(response) {
                                 console.log(response); // For debugging
                                 $("#customerPosts").append(response);
-                                $("#loadMore").data("offset", offset + 3);
+                                $("#load").data("offset", offset + 3);
                             }
                         });
                     });

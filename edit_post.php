@@ -78,7 +78,7 @@ if (isset($_POST['update'] )) {
 
         if ($stmt->execute()) {
             $success[] = "Post updated successfully.";
-            header("Location:post_view.php"); // 
+            header("Location:customer_profile.php"); // 
         } else {
             $errors[] = "Error updating post.";
         }
