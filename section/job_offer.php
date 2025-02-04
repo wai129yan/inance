@@ -16,10 +16,21 @@
             ?>
 
             <?php foreach ($customerPosts as $customerPost) : ?>
-                <div class="col-sm-6 col-md-4 mx-auto">
+                <div class="col-sm-6 col-md-4 mx-auto " style="min-height: 250px;">
                     <div class="box ">
                         <div class="img-box">
-                            <img src="./customerPhotos/<?= $customerPost['photo'] ?? 'dummy.png' ?>" alt="photo" />
+                            <!-- <img src="./customerPhotos/<= $customerPost['photo'] ?? 'dummy.png' ?>" alt="photo" /> -->
+
+                            <?php
+                            // Assuming $customerPost['photos'] contains a JSON-encoded string of photo filenames
+                            $photos = json_decode($customerPost['photo']); // Decode the JSON string into an array
+                            
+                            // Get the first photo or fall back to a default if no photos exist
+                            $photoToShow = !empty($photos) ? $photos[0] : 'dummy.png';
+                            echo '<img src="./photos/' . htmlspecialchars($photoToShow) . '" alt="photo" />'
+                            ?>
+
+
                         </div>
                         <div class="detail-box">
                             <a href="./job_detail.php?id=<?= $customerPost['id']; ?>">

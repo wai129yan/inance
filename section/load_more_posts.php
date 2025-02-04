@@ -16,33 +16,45 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($posts as $post) :
 ?>
     <div class="col-sm-6 col-md-4 mx-auto">
-       
-            <div class="box ">
-                        <div class="img-box">
-                            <img src="./customerPhotos/<?= $post['photo'] ?? 'dummy.png' ?>" alt="photo" />
-                        </div>
-                        <div class="detail-box">
-                            <h5>
-                                <a href="./job_detail.php?id=<?= $post['id']; ?>"><?= $post['title'] ?></a>
-                            </h5>
-                            <p>
-                                <?= $post['content'] ?>
-                            </p>
-                            <p>
-                                $ <?= $post['price'] ?>
-                            </p>
-                            
-                        </div>
-                    </div>
-                    <?php
-                    // $sql = "SELECT * FROM careeries WHERE career_id = ?";
-                    // $stmt = $pdo->prepare($sql);
-                    // $stmt->execute([$technician['career_id']]);
-                    // $career = $stmt->fetch(PDO::FETCH_ASSOC);
-                    ?>
-                    <!-- <= $career['name'] ?? "" ?> -->
+
+        <div class="box ">
+            <div class="img-box">
+                <!-- <img src="./customerPhotos/<= $post['photo'] ?? 'dummy.png' ?>" alt="photo" /> -->
+                <?php
+                
+                $photos = json_decode($post['photo']); 
+                //print_r($photos[0]);
+                
+                $photoToShow = !empty($photos) ? $photos[0] : 'dummy.png';
+
+                echo '<img src="./photos/' . htmlspecialchars($photoToShow) . '" alt="photo" />'
+                ?>
+
+                
+
+            </div>
+            <div class="detail-box">
+                <h5>
+                    <a href="./job_detail.php?id=<?= $post['id']; ?>"><?= strlen($post['title']) > 20 ? substr($post['title'], 0, 20) . '...' : $post['title']; ?></a>
+                </h5>
+                <p>
+                    <?= strlen($post['content']) > 20 ? substr($post['content'], 0, 20) . '...' : $post['content']; ?>
                 </p>
-            
+                <p>
+                    $ <?= $post['price']  ?>
+                </p>
+
+            </div>
         </div>
+        <?php
+        // $sql = "SELECT * FROM careeries WHERE career_id = ?";
+        // $stmt = $pdo->prepare($sql);
+        // $stmt->execute([$technician['career_id']]);
+        // $career = $stmt->fetch(PDO::FETCH_ASSOC);
+        ?>
+        <!-- <= $career['name'] ?? "" ?> -->
+        </p>
+
+    </div>
     </div>
 <?php endforeach; ?>
