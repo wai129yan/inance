@@ -94,27 +94,27 @@ if(isset($_POST['update_service'])){
 
                         <form action="" class="row" method="post">
                             <!-- Name Field -->
-                            <input type="hidden" name="id" value="<?= $service['serviceID']; ?>">
+                            <input type="hidden" name="id" value="<?= $service['ServiceID']; ?>">
 
                             <div class="col-12">
                                 <label for="name" class="form-label"> Service Name</label>
-                                <input type="text" class="form-control" value="<?= $service['serviceName']; ?>"  name="serviceName" value="" required>
+                                <input type="text" class="form-control" value="<?= $service['ServiceName']; ?>"  name="serviceName" value="" required>
                             </div>
 
                             <!-- Description Field -->
                             <div class="col-12">
                                 <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control"  name="description" rows="3" required><?= $service['description']; ?></textarea>
+                                <textarea class="form-control"  name="description" rows="3" required><?= $service['Description']; ?></textarea>
                             </div>
 
                             <div class="col-12">
                                 <label for="basePrice">Base Price</label>
-                                <input type="number" class="form-control" id="basePrice"  value="<?= $service['basePrice']; ?>" name="basePrice" step="0.01" required>
+                                <input type="number" class="form-control" id="basePrice"  value="<?= $service['BasePrice']; ?>" name="basePrice" step="0.01" required>
                             </div>
 
                             <div class="col-12">
                                 <label for="duration">Duration (e.g. '1 hour', '30 minutes')</label>
-                                <input type="text" class="form-control" id="duration"value="<?= $service['duration']; ?>" name="duration" required>
+                                <input type="text" class="form-control" id="duration"value="<?= $service['Duration']; ?>" name="duration" required>
                             </div>
                             
                             <div class="col-12 text-center mt-3">
