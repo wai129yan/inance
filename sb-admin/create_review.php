@@ -103,12 +103,37 @@ if (isset($_POST['create_review'])) {
 
                             <div class="col-12">
                                 <label for="customer_id" class="form-label">Customer ID</label>
-                                <input type="text" class="form-control" name="customer_id" value="" required>
+                                <select class="form-control" name="customer_id">
+                                    <option>Select Customer</option>
+                                    <?php
+                                    $sql = "SELECT * FROM customers";
+                                    $stmt = $pdo->prepare($sql);
+                                    $stmt->execute();
+                                    $customers = $stmt->fetchALL(PDO::FETCH_ASSOC);
+
+                                    foreach ($customers as $customer):
+
+                                    ?>
+                                        <option value="<?= $customer['CustomerID'] ?>"><?= $customer['name'] ?></option>
+                                    <?php endforeach ?>
+                                </select>
                             </div>
 
                             <div class="col-12">
                                 <label for="appointment_id" class="form-label">Appointment ID</label>
-                                <input type="text" class="form-control" name="appointment_id" value="" required>
+                                <select class="form-control" name="appointment_id">
+                                    <option>Select Appointment</option>
+                                    <?php
+                                    $sql = "SELECT * FROM appointments";
+                                    $stmt = $pdo->prepare($sql);
+                                    $stmt->execute();
+                                    $appointments = $stmt->fetchAll(PDO::FETCH_ASSOC); // Corrected to fetchAll
+
+                                    foreach ($appointments as $appointment): // Corrected variable name
+                                    ?>
+                                        <option value="<?= $appointment['AppointmentID'] ?>"><?= $appointment['AppointmentID'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
 
                             <div class="col-12">
@@ -127,7 +152,9 @@ if (isset($_POST['create_review'])) {
                                 <textarea class="form-control" name="comment" rows="3" required></textarea>
                             </div>
                             <br><br>
+
                             <div class="col-12">
+                            <label for="date" class="form-label">Date</label>
                                 <input type="datetime-local" class="form-control" name="date" value="" required>
                             </div>
 

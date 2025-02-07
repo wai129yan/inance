@@ -93,7 +93,19 @@ if(isset($_POST['create_invoiceIt'])){
                           
                             <div class="col-12">
                                 <label for="InvoiceId" class="form-label">Invoice ID</label>
-                                <input type="number" class="form-control"  name="InvoiceID" value="" required>
+                                <select class="form-control" name="InvoiceID">
+                                    <option>Select Invoice</option>
+                                    <?php
+                                    $sql = "SELECT * FROM invoices";
+                                    $stmt = $pdo->prepare($sql);
+                                    $stmt->execute();
+                                    $invoices = $stmt->fetchAll(PDO::FETCH_ASSOC); // Corrected to fetchAll
+
+                                    foreach ($invoices as $invoice): // Corrected variable name
+                                    ?>
+                                        <option value="<?= $invoice['InvoiceID'] ?>"><?= $invoice['InvoiceID'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
 
                             

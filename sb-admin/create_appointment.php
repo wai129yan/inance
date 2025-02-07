@@ -26,6 +26,8 @@ if (isset($_POST['create_appointment'])) {
   empty($appointmentDate) ? $errors[] = "Appointment date is required." : "";
   empty($startTime) ? $errors[] = "Start time is required." : "";
   empty($endTime) ? $errors[] = "End time is required." : "";
+  empty($status) ? $errors[] = "Status is required." : "";
+  empty($notes) ? $errors[] = "Notes is required." : "";
 
   // Check for time conflicts
   if (count($errors) == 0) {
@@ -117,7 +119,7 @@ if (isset($_POST['create_appointment'])) {
               <!-- Service ID Field -->
               <div class="col-12 mb-3">
                 <label for="service_id" class="form-label">Service Name</label>
-                <select class="form-control" name="customer_id">
+                <select class="form-control" name="service_id">
                   <option>Select Service</option>
                   <?php
                   $sql = "SELECT * FROM services";
@@ -135,8 +137,20 @@ if (isset($_POST['create_appointment'])) {
 
               <!-- Technician ID Field -->
               <div class="col-12 mb-3">
-                <label for="technician_id" class="form-label">Technician ID</label>
-                <input type="number" class="form-control" name="technician_id" required>
+                <label for="TechnicianID" class="form-label">Technician Name</label>
+                <select class="form-control" name="technician_id">
+                  <option>Select Technician</option>
+                  <?php
+                  $sql = "SELECT * FROM technicians";
+                  $stmt = $pdo->prepare($sql);
+                  $stmt->execute();
+                  $technicians = $stmt->fetchAll(PDO::FETCH_ASSOC); // Corrected to fetchAll
+
+                  foreach ($technicians as $technician): // Corrected variable name
+                  ?>
+                    <option value="<?= $technician['TechnicianID'] ?>"><?= $technician['name'] ?></option>
+                  <?php endforeach; ?>
+                </select>
               </div>
 
               <!-- Appointment Date Field -->
@@ -160,10 +174,10 @@ if (isset($_POST['create_appointment'])) {
               <!-- Status Field -->
               <div class="col-12 mb-3">
                 <label for="status" class="form-label">Status</label>
-                <select class="form-control" name="status" required>
-                  <option value="Pending">Pending</option>
-                  <option value="Confirmed">Confirmed</option>
-                  <option value="Cancelled">Cancelled</option>
+                <select class="form-control" name="status" >
+                  <option value="pending">Pending</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="cancelled">Cancelled</option>
                 </select>
               </div>
 

@@ -9,54 +9,53 @@ $success = [];
 ?>
 
 <?php
-if(isset($_POST['create_invoice'])){
-    $appointmentID = $_POST['appointmentID'];
+if (isset($_POST['create_invoice'])) {
+    $appointmentID = $_POST['appointment_id'];
     $totalAmount = $_POST['totalAmount'];
     $tax = $_POST['tax'];
     $dateIssued = $_POST['dateIssued'];
     $dueDate = $_POST['dueDate'];
 
-    if(empty($appointmentID)){
+    if (empty($appointmentID)) {
         $errors[] = "Appointment ID Required";
     }
-    if(empty($totalAmount)){
+    if (empty($totalAmount)) {
         $errors[] = "Total Amount Required";
     }
-    if(empty($tax)){
+    if (empty($tax)) {
         $errors[] = "Tax Required";
     }
-    if(empty($dateIssued)){
+    if (empty($dateIssued)) {
         $errors[] = "Date Issued Required";
     }
-    if(empty($dueDate)){
+    if (empty($dueDate)) {
         $errors[] = "Due Date Required";
     }
 
-    if(count($errors) == 0){
+    if (count($errors) == 0) {
         $sqlAppointment = "SELECT COUNT(*) FROM appointments WHERE AppointmentID = :appointmentID";
         $stmt = $pdo->prepare($sqlAppointment);
-        $stmt->bindParam(':appointmentID',$appointmentID,PDO::PARAM_INT);
+        $stmt->bindParam(':appointmentID', $appointmentID, PDO::PARAM_INT);
         $stmt->execute();
         $count = $stmt->fetchColumn();
-       if(!$count){
-           $errors[] = "Appointment ID does not exist"; 
-    }else{
-        $sql = "INSERT INTO invoices (AppointmentID,TotalAmount,Tax,DateIssued,DueDate) VALUES (:appointmentID,:totalAmount,:tax,:dateIssued,:dueDate)";
-        $result = $pdo->prepare($sql);
-        $result->bindParam(':appointmentID',$appointmentID,PDO::PARAM_INT);
-        $result->bindParam(':totalAmount',$totalAmount,PDO::PARAM_STR);
-        $result->bindParam(':tax',$tax,PDO::PARAM_STR);
-        $result->bindParam(':dateIssued',$dateIssued,PDO::PARAM_STR);
-        $result->bindParam(':dueDate',$dueDate,PDO::PARAM_STR);
-        $result->execute();
-        if($result){
-            $success[] = "Created Successfully";
-        }else{
-            $errors[] = "Failed to create the record.";
+        if (!$count) {
+            $errors[] = "Appointment ID does not exist";
+        } else {
+            $sql = "INSERT INTO invoices (AppointmentID,TotalAmount,Tax,DateIssued,DueDate) VALUES (:appointmentID,:totalAmount,:tax,:dateIssued,:dueDate)";
+            $result = $pdo->prepare($sql);
+            $result->bindParam(':appointmentID', $appointmentID, PDO::PARAM_INT);
+            $result->bindParam(':totalAmount', $totalAmount, PDO::PARAM_STR);
+            $result->bindParam(':tax', $tax, PDO::PARAM_STR);
+            $result->bindParam(':dateIssued', $dateIssued, PDO::PARAM_STR);
+            $result->bindParam(':dueDate', $dueDate, PDO::PARAM_STR);
+            $result->execute();
+            if ($result) {
+                $success[] = "Created Successfully";
+            } else {
+                $errors[] = "Failed to create the record.";
+            }
         }
     }
-    }
-    
 }
 
 ?>
@@ -93,14 +92,26 @@ if(isset($_POST['create_invoice'])){
                         <form action="create_invoice.php" class="row" method="post">
                             <!-- Appointment ID Field -->
                             <div class="col-12">
-                                <label for="appointmentID" class="form-label">Appointment ID</label>
-                                <input type="text" class="form-control"  name="appointmentID" value="" required>
+                                <label for="appointmentID" class="form-label">Appointment Name</label>
+                                <select class="form-control" name="appointment_id">
+                                    <option>Select Appointment</option>
+                                    <?php
+                                    $sql = "SELECT * FROM appointments";
+                                    $stmt = $pdo->prepare($sql);
+                                    $stmt->execute();
+                                    $appointments = $stmt->fetchAll(PDO::FETCH_ASSOC); // Corrected to fetchAll
+
+                                    foreach ($appointments as $appointment): // Corrected variable name
+                                    ?>
+                                        <option value="<?= $appointment['AppointmentID'] ?>"><?= $appointment['AppointmentID'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
 
                             <!-- Total Amount Field -->
                             <div class="col-12">
                                 <label for="totalAmount" class="form-label">Total Amount</label>
-                                <input type="number" class="form-control"  name="totalAmount" step="0.01" required>
+                                <input type="number" class="form-control" name="totalAmount" step="0.01" required>
                             </div>
 
                             <!-- Tax Field -->
@@ -118,7 +129,7 @@ if(isset($_POST['create_invoice'])){
                             <!-- Due Date Field -->
                             <div class="col-12">
                                 <label for="dueDate" class="form-label">Due Date</label>
-                                <input type="date" class="form-control"name="dueDate" required>
+                                <input type="date" class="form-control" name="dueDate" required>
                             </div>
 
                             <!-- Submit Button -->
