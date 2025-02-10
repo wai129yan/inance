@@ -80,9 +80,9 @@
                                                     <td><?php echo $plan['duration']. ' Months' ;?></td>
 
                                                     <td>
-                                                        <a href="edit_plan.php?career_id=<?php echo $plan['plan_id']; ?>" class="btn btn-info btn-sm">Edit</a>
+                                                        <a href="edit_plan.php?plan_id=<?php echo $plan['plan_id']; ?>" class="btn btn-info btn-sm">Edit</a>
 
-                                                        <a href="delete_plan.php?career_id=<?php echo $plan['plan_id']; ?>" class="btn btn-danger btn-sm swl-delete" >Delete</a>
+                                                        <a href="delete_plan.php?plan_id=<?php echo $plan['plan_id']; ?>" class="btn btn-danger btn-sm swl-delete" >Delete</a>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>

@@ -7,14 +7,13 @@ $success = [];
 
 
 if (isset($_GET['plan_id'])) {
-    $plan_id = $_GET['plan_id'];
-
-    
+    $planID = $_GET['plan_id'];
     $sql = "SELECT * FROM membership_plans WHERE plan_id = :plan_id";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':plan_id', $plan_id, PDO::PARAM_INT);
+    $stmt->bindParam(':plan_id', $planID, PDO::PARAM_INT);
     $stmt->execute();
-    $memPlan = $stmt->fetch(PDO::FETCH_ASSOC); // Corrected variable name to $memPlan
+
+    $memPlan = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$memPlan) {
         $errors[] = "Plan not found!";
@@ -22,6 +21,7 @@ if (isset($_GET['plan_id'])) {
 } else {
     $errors[] = "Invalid Plan ID!";
 }
+
 
 
 if (isset($_POST['update_plan'])) {
@@ -53,7 +53,7 @@ if (isset($_POST['update_plan'])) {
         $stmt->bindParam(':price', $price, PDO::PARAM_INT);
         $stmt->bindParam(':duration', $duration, PDO::PARAM_INT);
         $stmt->bindParam(':plan_id', $plan_id, PDO::PARAM_INT);
-        
+
         if ($stmt->execute()) {
             $success[] = "Plan updated successfully!";
             // Optionally, redirect to another page after successful update
@@ -86,7 +86,7 @@ if (isset($_POST['update_plan'])) {
                     <div class="col-md-6">
                         <?php include '../errors.php'; ?>
                         <?php include '../success.php'; ?>
-                        
+
                         <h1 class="text-center fw-bold mb-4">Edit Membership Plan</h1>
 
                         <form action="" method="post">
@@ -95,7 +95,7 @@ if (isset($_POST['update_plan'])) {
                             <!-- Plan Name -->
                             <div class="form-group">
                                 <label for="plan_name">Plan Name</label>
-                                <select class="form-control" name="plan_name" >
+                                <select class="form-control" name="plan_name">
                                     <option value="basic" <?= ($memPlan['plan_name'] ?? '') == 'basic' ? 'selected' : ''; ?>>Basic</option>
                                     <option value="standard" <?= ($memPlan['plan_name'] ?? '') == 'standard' ? 'selected' : ''; ?>>Standard</option>
                                     <option value="premium" <?= ($memPlan['plan_name'] ?? '') == 'premium' ? 'selected' : ''; ?>>Premium</option>
@@ -105,13 +105,13 @@ if (isset($_POST['update_plan'])) {
                             <!-- Description -->
                             <div class="form-group">
                                 <label for="description">Description</label>
-                                <textarea class="form-control" rows="3" name="description" placeholder="Enter plan description" ><?= htmlspecialchars($memPlan['description'] ?? ''); ?></textarea>
+                                <textarea class="form-control" rows="3" name="description" placeholder="Enter plan description"><?= htmlspecialchars($memPlan['description'] ?? ''); ?></textarea>
                             </div>
 
                             <!-- Price -->
                             <div class="form-group">
                                 <label for="price">Price ($)</label>
-                                <input type="number" class="form-control" name="price" value="<?= htmlspecialchars($memPlan['price'] ?? ''); ?>" placeholder="Enter price" required>
+                                <input type="number" class="form-control" name="price" value="<?= $memPlan['price'] ?? ''; ?>" placeholder="Enter price" required>
                             </div>
 
                             <!-- Duration -->

@@ -21,7 +21,7 @@ if (isset($_POST['plan'])) {
     if (empty($description)) {
         $errors[] = 'Description is required';
     }
-    if (empty($price) || !is_numeric($price)) {
+    if (empty($price) ) {
         $errors[] = 'Valid price is required';
     }
     if (empty($duration)) {
