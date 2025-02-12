@@ -1,73 +1,108 @@
+<style>
+    html,
+    body {
+        position: relative;
+        height: 100%;
+    }
+
+    body {
+        background: #eee;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color: #000;
+        margin: 0;
+        padding: 0;
+    }
+
+    swiper-container {
+        width: 100%;
+        height: 100%;
+        background: #000;
+    }
+
+    swiper-slide {
+        font-size: 18px;
+        color: #fff;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 40px 60px;
+        text-align: center;
+    }
+
+    .parallax-bg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 130%;
+        height: 100%;
+        -webkit-background-size: cover;
+        background-size: cover;
+        background-position: center;
+    }
+
+    swiper-slide .title {
+        font-size: 41px;
+        font-weight: 300;
+    }
+
+    swiper-slide .subtitle {
+        font-size: 21px;
+    }
+
+    swiper-slide .text {
+        font-size: 14px;
+        max-width: 400px;
+        line-height: 1.3;
+        margin: 10px auto;
+    }
+
+    swiper-slide img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 15px;
+    }
+</style>
+
 <section class="service_section layout_padding" id="service">
     <div class="container">
         <div class="heading_container heading_center">
-            <h2> Big Customer</h2>
+            <h2>Big Customer</h2>
         </div>
+
         <div class="row" id="customerPosts">
             <?php
-            $sql = "SELECT * FROM customers ORDER BY RAND() LIMIT 3";
+            // Database query
+            $sql = "SELECT * FROM customers";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
             $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
             ?>
+        </div>
 
-            <?php foreach ($customers as $customer) : ?>
-                <div class="col-sm-6 col-md-4 mx-auto" style="min-height: 250px;">
-                    <div class="box">
-                        <div class="img-box owl-carousel owl-theme">
-                            <?php
-                            $photos = json_decode($customer['photo']); // Decode the JSON string into an array
-                            if (!empty($photos)) {
-                                foreach ($photos as $photo) {
-                                    echo '<img class="owl-lazy" data-src="./photos/' . htmlspecialchars($photo) . '" alt="photo" />';
-                                }
-                            } else {
-                                echo '<img class="owl-lazy" data-src="./photos/dummy.png" alt="photo" />';
-                            }
-                            ?>
-                        </div>
-                        <div class="detail-box">
-                            <a href="./job_detail.php?id=<?= $customer['id']; ?>">
-                                <?= strlen($customer['name']) > 20 ? substr($customer['name'], 0, 20) . '...' : $customer['name']; ?>
-                            </a>
-                            <p>
-                                <?= strlen($customer['email']) > 20 ? substr($customer['email'], 0, 20) . '...' : $customer['email']; ?>
-                            </p>
-                            <p>
-                                <?= $customer['address'] ?>
-                            </p>
-                        </div>
-                    </div>
-                </div>
+        <!-- Swiper Container -->
+        <swiper-container style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff"
+            class="mySwiper" speed="600" parallax="true" pagination="true" pagination-clickable="true" navigation="true">
 
-                <div class="owl-carousel owl-theme">
-                    <img class="owl-lazy" data-src="https://placehold.it/350x450&text=1" data-src-retina="https://placehold.it/350x250&text=1-retina" alt="">
-                    <img class="owl-lazy" data-src="https://placehold.it/350x650&text=2" data-src-retina="https://placehold.it/350x250&text=2-retina" alt="">
-                    <picture>
-                        <source class="owl-lazy" media="(min-width: 650px)" data-srcset="https://placehold.it/350x250&text=3-large">
-                        <source class="owl-lazy" media="(min-width: 350px)" data-srcset="https://placehold.it/350x250&text=3-medium">
-                        <img class="owl-lazy" data-src="https://placehold.it/350x250&text=3-fallback" alt="">
-                    </picture>
-                    <img class="owl-lazy" data-src="https://placehold.it/350x250&text=4" alt="">
-                    <img class="owl-lazy" data-src="https://placehold.it/350x250&text=5" alt="">
-                    <img class="owl-lazy" data-src="https://placehold.it/350x250&text=6" alt="">
-                </div>
+            <!-- Parallax Background -->
+            <div slot="container-start" class="parallax-bg"
+                style="background-image: url('https://swiperjs.com/demos/images/nature-1.jpg');"
+                data-swiper-parallax="-23%">
+            </div>
+
+            <!-- Customer Slides -->
+            <?php foreach ($customers as $customer): ?>
+                <swiper-slide>
+                    <img src="./customerPhotos/<?= $customer['photo'] ?>" alt="">
+                    <div class="title" data-swiper-parallax="-300"><?= $customer['name'] ?></div>
+                    <div class="subtitle" data-swiper-parallax="-200"><?= $customer['email'] ?></div>
+                    <div class="text" data-swiper-parallax="-100"><?= $customer['address'] ?></div>
+                </swiper-slide>
             <?php endforeach; ?>
-        </div>
 
-        <div class="btn-box">
-            <button class="btn btn-primary" id="load" data-offset="3">
-                View More
-            </button>
-            <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-            <script>
-                $('.owl-carousel').owlCarousel({
-                    items: 4,
-                    lazyLoad: true,
-                    loop: true,
-                    margin: 10
-                });
-            </script>
-        </div>
+        </swiper-container>
     </div>
 </section>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
