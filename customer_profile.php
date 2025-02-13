@@ -147,7 +147,7 @@ include("./layout/hero2.php");
 
 
         <?php if (!empty($posts)): ?>
-            <table class="table table-striped table-bordered m-3">
+            <table class="table table-striped table-bordered m-3" id="posts-table">
                 <thead>
                     <tr>
                         <th>Title</th>
@@ -258,7 +258,19 @@ include("./layout/hero2.php");
     });
 </script>
 
-
+<script>
+    $(document).ready(function() {
+        $('#posts-table').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true
+        });
+    });
+</script>
 
 <!-- <php
 // Sample array

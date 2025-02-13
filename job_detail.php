@@ -65,8 +65,8 @@ include("./layout/hero2.php");
         </div>
     </div>
 </section>
-<!-- <style>
-    .card {
+<style>
+    /* .card {
         border: none;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
        
@@ -87,15 +87,15 @@ include("./layout/hero2.php");
     .btn-primary:hover {
         background-color: #0056b3;
         border-color: #0056b3;
-    }
-</style> -->
+    } */
+</style>
     </div>
 
 
     <div class="col-md-4">
     <div class="py-2">
         <h3 class="mb-4 text-center">Related Posts</h3>
-        <div class="d-flex flex-column align-items-center" style="gap: 10px; min-height: 100vh;">
+        <div class="d-flex flex-column align-items-center" style="gap: 15px; min-height: 100vh; ">
             <?php
             $relatedSql = "SELECT * FROM posts WHERE id != :id ORDER BY RAND() LIMIT 3";
             $relatedStmt = $pdo->prepare($relatedSql);
@@ -107,13 +107,13 @@ include("./layout/hero2.php");
                 $photos = json_decode($relatedPost['photo']); // Use $relatedPost instead of $post
                 $photoToShow = !empty($photos) ? $photos[0] : 'dummy.png';
             ?>
-                <div class="card text-center shadow-lg" style="width: 100%; max-width: 300px; border-radius: 10px;">
+                <div class="card text-center shadow-lg" style="width: 50%; max-width: 250px; border-radius: 5px; object-fit: cover;  object-position: center;">
                     <img src="./photos/<?= htmlspecialchars($photoToShow); ?>"
                          class="card-img-top"
                          alt="photo"
                          style="height: 150px; object-fit: cover; border-top-left-radius: 10px; border-top-right-radius: 10px;">
                     <div class="card-body">
-                        <h6 class="card-title font-weight-bold text-primary"><?= strlen($relatedPost['title']) > 20 ? substr($relatedPost['title'], 0, 20) . '...' : $relatedPost['title']; ?></h6>
+                        <h6 class="card-title font-weight-bold text-primary " style="font-size: 1.25rem;"><?= strlen($relatedPost['title']) > 20 ? substr($relatedPost['title'], 0, 20) . '...' : $relatedPost['title']; ?></h6>
                         <p class="card-text text-success">$<?= htmlspecialchars($relatedPost['price']); ?></p>
                         <a href="job_detail.php?id=<?= $relatedPost['id'] ?>" class="btn btn-sm btn-primary">View Details</a>
                     </div>
