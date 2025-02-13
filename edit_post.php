@@ -27,7 +27,7 @@ if (!$post) {
     $errors[] = "Post not found or you don't have permission to edit it.";
 }
 
-if (isset($_POST['update'] )) {
+if (isset($_POST['update'])) {
     $title = $_POST['title'];
     $phone = $_POST['phone'];
     $content = $_POST['content'];
@@ -48,12 +48,12 @@ if (isset($_POST['update'] )) {
                 $uniqueName = "photo_" . time() . "_" . $key . "." . $extension;
                 move_uploaded_file($tmpname, "photos/$uniqueName");
                 $savedPhotos[] = $uniqueName;
-            // } else {
-            //     $errors[] = "Invalid file type: $photo. Only jpg, jpeg, png, and webp are allowed.";
-            // }
+                // } else {
+                //     $errors[] = "Invalid file type: $photo. Only jpg, jpeg, png, and webp are allowed.";
+                // }
             }
         }
-    } 
+    }
 
     $photoDB = json_encode($savedPhotos);
 
@@ -98,8 +98,8 @@ include './layout/header.php';
         </div>
 
         <?php
-            include 'success.php';
-            include 'errors.php';
+        include 'success.php';
+        include 'errors.php';
         ?>
         <?php if (!empty($errors)): ?>
             <div class="alert alert-danger">
@@ -136,39 +136,80 @@ include './layout/header.php';
                 <div class="mb-3">
                     <label for="photo" class="form-label">Photos</label>
                     <input type="file" class="form-control" name="photo[]" accept="image/*" multiple>
-                    <p class="mt-2">Current Photos:</p>
                     <?php if (!empty($post['photo'])): ?>
-                        <?php 
+                        <?php
                         $photos = json_decode($post['photo'], true);
+                        echo '<div class="row">';
                         foreach ($photos as $photo): ?>
-                            <img src="photos/<?php echo htmlspecialchars($photo); ?>" alt="Post Photo" class="img-thumbnail" style="max-width: 100px; height: auto;">
+                            <div class="col-4 m-2">
+                                <div class="position-relative d-inline-block mb-2">
+                                    <!-- Photo -->
+                                    <img src="photos/<?php echo htmlspecialchars($photo); ?>" alt="Post Photo" class="img-thumbnail" style="max-width: 250px; height:150px;">
+
+                                    <!-- Delete Button -->
+                                    <button type="button" class="btn btn-danger  remove-photo" data-photo="<?php echo htmlspecialchars($photo); ?>">
+                                        ×
+                                    </button>
+                                </div>
+                            </div>
                         <?php endforeach; ?>
-                    <?php endif; ?>
                 </div>
-
-                <div class="mb-3">
-                    <label for="content" class="form-label">Content</label>
-                    <textarea name="content" class="form-control" rows="3"><?php echo htmlspecialchars($post['content']); ?></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label for="price" class="form-label">Price</label>
-                    <input type="text" name="price" class="form-control" value="<?php echo htmlspecialchars($post['price']); ?>" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="address" class="form-label">Address</label>
-                    <textarea name="address" class="form-control" rows="3"><?php echo htmlspecialchars($post['address']); ?></textarea>
-                </div>
-
-                <div class="text-center">
-                    <input type="submit" name="update" class="btn btn-primary" value="Update Post">
-                </div>
-            </form>
-        <?php endif; ?>
+            <?php endif; ?>
     </div>
+
+
+    <div class="mb-3">
+        <label for="content" class="form-label">Content</label>
+        <textarea name="content" class="form-control" rows="3"><?php echo htmlspecialchars($post['content']); ?></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label for="price" class="form-label">Price</label>
+        <input type="text" name="price" class="form-control" value="<?php echo htmlspecialchars($post['price']); ?>" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="address" class="form-label">Address</label>
+        <textarea name="address" class="form-control" rows="3"><?php echo htmlspecialchars($post['address']); ?></textarea>
+    </div>
+
+    <div class="text-center">
+        <input type="submit" name="update" class="btn btn-primary" value="Update Post">
+    </div>
+    </form>
+<?php endif; ?>
+</div>
 </section>
 
 <?php include("./layout/footer.php"); ?>
 
-                        
+<script>
+    $(document).ready(function() {
+        $('.remove-photo').on('click', function() {
+            var button = $(this);
+            var photoContainer = button.closest('.col-4');
+            var photo = button.data('photo');
+
+            $.ajax({
+                url: 'remove_photo.php',
+                type: 'POST',
+                data: {
+                    photo: photo,
+                    post_id: <?php echo $post_id; ?>
+                },
+                success: function(response) {
+                    if (response.success) {
+                        photoContainer.fadeOut(200, function() { // Immediately remove the photo container
+                            $(this).remove();
+                        });
+                    } else {
+                        alert(response.message || 'Failed to delete photo');
+                    }
+                },
+                error: function() {
+                    alert('Error occurred while deleting the photo');
+                }
+            });
+        });
+    });
+</script>
