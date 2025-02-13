@@ -66,6 +66,36 @@ include("./layout/header.php");
 include("./layout/hero2.php");
 
 ?>
+<!-- Add DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap4.min.css">
+
+<style>
+    .d-flex.gap-1 {
+        gap: 0.25rem !important;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+
+    .btn-outline-primary,
+    .btn-outline-danger {
+        border-width: 1px;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .btn-outline-primary:hover,
+    .btn-outline-danger:hover {
+        transform: translateY(-1px);
+    }
+
+    .fas {
+        font-size: 0.875rem;
+    }
+</style>
 
 <section class="posts_section layout_padding" id="posts">
     <div class="container">
@@ -79,7 +109,7 @@ include("./layout/hero2.php");
         </div> -->
 
 
-        <div class="card" style="min-width:18rem ; max-width:20rem">
+        <div class="card mb-5" style="min-width:18rem ; max-width:20rem">
 
             <img src="./customerPhotos/<?php echo $currentCus['photo'] ?? 'dummy.png' ?>" class="object-fit-cover m-auto rounded-circle" alt="..." width="100" height="100" style="transform:translateY(-50%)" ;>
             <div class="card-body" style="margin-top:-60px" ;>
@@ -147,82 +177,141 @@ include("./layout/hero2.php");
 
 
         <?php if (!empty($posts)): ?>
-            <table class="table table-striped table-bordered m-3">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Phone</th>
-                        <th>Price</th>
-                        <th>Address</th>
-                        <th>Content</th>
-                        <th>Photos</th>
-                        <th style="width: 150px;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($posts as $post): ?>
+            <div class="table-responsive">
+                <table id="postsTable" class="table table-hover">
+                    <thead>
                         <tr>
-                            <td>
-                                <?php
-                                // Limit title to 20 characters
-                                $maxLength = 20; // Maximum length for the truncated title
-                                $title = htmlspecialchars($post['title']); // Sanitize the title
-                                $limitedTitle = substr($title, 0, $maxLength); // Truncate the title to 20 characters
-
-                                // Add an ellipsis (...) if the title exceeds the max length
-                                if (strlen($title) > $maxLength) {
-                                    $limitedTitle .= '...'; // Append ellipsis for truncated titles
-                                }
-
-                                echo $limitedTitle; // Display the truncated title
-
-                                // If the title exceeds the max length, show a "Details" link
-                                if (strlen($title) > $maxLength): ?>
-                                    <br><a href="edit_post.php?id=<?php echo $post['id']; ?>" class="btn btn-link">Details</a>
-                                <?php endif; ?>
-                            </td>
-                            <td><?php echo htmlspecialchars($post['phone']); ?></td>
-                            <td><?php echo htmlspecialchars($post['price']); ?></td>
-                            <td><?php echo htmlspecialchars($post['address']); ?></td>
-                            <td>
-                                <?php
-                                // Limit content to 20 words
-                                $words = explode(' ', strip_tags($post['content'])); // Remove HTML tags and split by spaces
-                                $limitedContent = implode(' ', array_slice($words, 0, 10)); // Get the first 20 words
-                                echo nl2br(htmlspecialchars($limitedContent)); // Display the truncated content
-
-                                // If the content has more than 20 words, show a "Details" link
-                                if (count($words) > 10): ?>
-                                    <br><a href="edit_post.php?id=<?php echo $post['id']; ?>" class="btn btn-link">Details</a>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <?php if (!empty($post['photo'])): ?>
-                                    <?php
-                                    $photos = json_decode($post['photo'], true) ?? [];
-                                    foreach ($photos as $photo): ?>
-                                        <img src="photos/<?php echo htmlspecialchars($photo); ?>" alt="Post Photo" class="img-thumbnail" style="max-width: 100px; height: auto;">
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    No photos
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <!-- Example of Edit and Delete actions -->
-                                <a href="edit_post.php?id=<?php echo $post['id']; ?>" class="btn btn-primary btn-sm">Edit</a>
-                                <a href="delete_post.php?id=<?php echo $post['id']; ?>" class="btn btn-danger btn-sm swl-delete">Delete</a>
-                            </td>
+                            <th>Title</th>
+                            <th>Phone</th>
+                            <th>Price</th>
+                            <th>Address</th>
+                            <th>Content</th>
+                            <th>Photos</th>
+                            <th>Actions</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($posts as $post): ?>
+                            <tr>
+                                <td><?php
+                                    $title = htmlspecialchars($post['title']);
+                                    echo (strlen($title) > 15) ? substr($title, 0, 15) . '...' : $title;
+                                    ?></td>
+                                <td><?php echo htmlspecialchars($post['phone']); ?></td>
+                                <td>$<?php echo number_format($post['price'], 2); ?></td>
+                                <td><?php
+                                    $address = htmlspecialchars($post['address']);
+                                    echo (strlen($address) > 15) ? substr($address, 0, 15) . '...' : $address;
+                                    ?></td>
+                                <td><?php
+                                    $content = strip_tags($post['content']);
+                                    $words = str_word_count($content, 1);
+                                    if (count($words) > 15) {
+                                        $limitedWords = array_slice($words, 0, 15);
+                                        echo htmlspecialchars(implode(' ', $limitedWords)) . '...';
+                                    } else {
+                                        echo htmlspecialchars($content);
+                                    }
+                                    ?></td>
+                                <td class="text-center">
+                                    <?php if (!empty($post['photo'])): ?>
+                                        <?php
+                                        $photos = json_decode($post['photo'], true) ?? [];
+                                        $count = 0;
+                                        foreach ($photos as $photo): ?>
+                                            <?php if ($count % 2 == 0): ?>
+                                                <div class="row">
+                                                <?php endif; ?>
+                                                <div class="col">
+                                                    <img src="photos/<?php echo htmlspecialchars($photo); ?>" alt="Post Photo" class="img-thumbnail" style="width: 250px;margin:2px;">
+                                                </div>
+                                                <?php if ($count % 2 == 1): ?>
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php $count++; ?>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <span class="text-muted">No photos</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <a href="edit_post.php?id=<?php echo $post['id']; ?>"
+                                            class="btn btn-sm btn-outline-primary d-inline-flex align-items-center">
+                                            Edit
+                                        </a>
+                                        <a href="delete_post.php?id=<?php echo $post['id']; ?>"
+                                            class="btn btn-sm btn-outline-danger d-inline-flex align-items-center swl-delete">
+                                            Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         <?php else: ?>
-            <p>You have not created any posts yet.</p>
+            <p class="text-muted">You have not created any posts yet.</p>
         <?php endif; ?>
     </div>
 </section>
 
 <?php include("./layout/footer.php"); ?>
+<!-- Add DataTables JS -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
+
+<!-- Initialize DataTable -->
+<script>
+    $(document).ready(function() {
+        $('#postsTable').DataTable({
+            responsive: true,
+            pageLength: 10,
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search posts...",
+                lengthMenu: "_MENU_ posts per page",
+                info: "Showing _START_ to _END_ of _TOTAL_ posts",
+                infoEmpty: "No posts available",
+                infoFiltered: "(filtered from _MAX_ total posts)",
+                zeroRecords: "No matching posts found"
+            },
+            columnDefs: [{
+                    className: "text-center",
+                    targets: [1, 2, 5, 6]
+                },
+                {
+                    className: "text-right",
+                    targets: [2]
+                },
+                {
+                    orderable: false,
+                    targets: [5, 6]
+                }
+            ],
+            order: [
+                [0, 'asc']
+            ],
+            autoWidth: false,
+            scrollX: true,
+            scrollY: '50vh',
+            scrollCollapse: true,
+            fixedHeader: true
+        });
+
+        // Add custom styling to DataTables elements
+        $('.dataTables_wrapper .dataTables_filter input').addClass('form-control form-control-sm');
+        $('.dataTables_wrapper .dataTables_length select').addClass('form-control form-control-sm');
+    });
+</script>
+
 <script>
     // Get the file input element
     const fileInput = document.getElementById('cusphoto');
@@ -257,33 +346,3 @@ include("./layout/hero2.php");
         }
     });
 </script>
-
-
-
-<!-- <php
-// Sample array
-$array = [
-    ['Name', 'Age', 'Location'],
-    ['Alice', 30, 'New York'],
-    ['Bob', 25, 'Los Angeles'],
-    ['Charlie', 35, 'Chicago']
-];
-
-// Open a file in write mode (this will create or overwrite the file)
-$file = fopen('output.csv', 'w');
-
-// Check if the file was opened successfully
-if ($file === false) {
-    die('Error opening the file');
-}
-
-// Loop through the array and write each row to the CSV file
-foreach ($array as $row) {
-    fputcsv($file, $row); // Writes the row to the CSV file
-}
-
-// Close the file after writing
-fclose($file);
-
-echo 'CSV file created successfully!';
-> -->
