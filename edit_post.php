@@ -199,8 +199,7 @@ include './layout/header.php';
                 },
                 success: function(response) {
                     if (response.success) {
-                        // Immediately remove the photo container
-                        photoContainer.fadeOut(200, function() {
+                        photoContainer.fadeOut(200, function() { // Immediately remove the photo container
                             $(this).remove();
                         });
                     } else {
