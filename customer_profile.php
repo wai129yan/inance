@@ -225,7 +225,8 @@ include("./layout/hero2.php");
                                                 <div class="row">
                                                 <?php endif; ?>
                                                 <div class="col">
-                                                    <img src="photos/<?php echo htmlspecialchars($photo); ?>" alt="Post Photo" class="img-thumbnail" style="width: 250px;margin:2px;">
+                                                    <img src="photos/<?php echo htmlspecialchars($photo); ?>" alt="Post Photo" class="img-thumbnail" style="width: 250px;margin:
+                                                    2px;">
                                                 </div>
                                                 <?php if ($count % 2 == 1): ?>
                                                 </div>
