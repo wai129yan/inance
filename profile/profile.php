@@ -2,73 +2,101 @@
 // Using relative path
 include("../database/db.php");
 
-// Or using absolute path
-// include(__DIR__ . "/../database/db.php");
-
+// Check if session variables are set
 $auth = isset($_SESSION['name']);
 $career = isset($_SESSION['career']);
 
+// Check if technician ID is passed
 if (isset($_GET['id'])) {
-  $id = $_GET['id'];
+    $id = $_GET['id'];
 }
-?>
 
-<?php
+// Fetch technician details
 $query = "SELECT * FROM technicians WHERE TechnicianID = :id";
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':id', $id, PDO::PARAM_STR);
 $stmt->execute();
 $technician = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Fetch career data
+// Fetch career details
 if ($technician) {
-  $career_id = $technician['career_id'];
-  $query = "SELECT * FROM careeries WHERE career_id = :id";
-  $stmt = $pdo->prepare($query);
-  $stmt->bindParam(':id', $career_id, PDO::PARAM_STR);
-  $stmt->execute();
-  $career = $stmt->fetch(PDO::FETCH_ASSOC);
+    $career_id = $technician['career_id'];
+    $query = "SELECT * FROM careeries WHERE career_id = :id";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':id', $career_id, PDO::PARAM_STR);
+    $stmt->execute();
+    $career = $stmt->fetch(PDO::FETCH_ASSOC);
 }
-
-
 
 if (isset($_POST['profile_update'])) {
-  $id = $_POST['id'];
-  $name = $_POST['name'];
-  $photo = $_FILES['photos']['name'];
-  $tmpName = $_FILES['photos']['tmp_name'];
-  move_uploaded_file($tmpName, "../images/technician/$photo");
-  $specialization = $_POST['Specialization'];
-  $aboutme = $_POST['aboutme'];
-  $address = $_POST['Address'];
-  empty($name) ? $errors[] = "Name Required" : "";
-  empty($specialization) ? $errors[] = "Specialization Required" : "";
-  empty($aboutme) ? $errors[] = "About me required" : "";
-  empty($address) ? $errors[] = "Address me required" : "";
+    // Initialize error array
+    $errors = [];
+    $success = [];
 
-  if (count($errors) == 0) {
-    $updateTech = "UPDATE technicians SET name = :name, photos = :photos, Specialization = :specialization, aboutme = :aboutme, Address = :address WHERE TechnicianID = :id";
-    $stmt = $pdo->prepare($updateTech);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-    $stmt->bindParam(':photos', $photo, PDO::PARAM_STR);
-    $stmt->bindParam(':specialization', $specialization, PDO::PARAM_STR);
-    $stmt->bindParam(':aboutme', $aboutme, PDO::PARAM_STR);
-    $stmt->bindParam(':address', $address, PDO::PARAM_STR);
-    $result = $stmt->execute();
-    if ($result) {
-      $success[] = "Profile Updated Successfully";
-      header("Location: profile.php?id=" . $id);
-      exit();
+    // Retrieve form data
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $photo = $_FILES['photos']['name'];
+    $tmpName = $_FILES['photos']['tmp_name'];
+    $phone = $_POST['Phone'];
+    $address = $_POST['Address'];
+
+    // Validate inputs
+    if (empty($name)) $errors[] = "Name is required";
+    if (empty($address)) $errors[] = "Address is required";
+    if (empty($phone)) $errors[] = "Phone number is required";
+
+    // Handle file upload if a new photo is provided
+    if (!empty($photo)) {
+        // Validate file type and size (optional)
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        if (!in_array($_FILES['photos']['type'], $allowedTypes)) {
+            $errors[] = "Invalid file type. Only JPG, JPEG, and PNG are allowed.";
+        }
+
+        // Move uploaded file if no errors
+        if (empty($errors)) {
+            if (!move_uploaded_file($tmpName, "../images/technician/$photo")) {
+                $errors[] = "Failed to upload photo.";
+            }
+        }
+    } else {
+        // If no new photo is uploaded, keep the existing one
+        $photo = $_POST['existing_photo'];
     }
-  }
-}
 
-// include "../layout/navtop.php";
+    // If no errors, proceed with database update
+    if (count($errors) == 0) {
+        // Prepare the update query
+        $updateTech = "UPDATE technicians SET name = :name, photos = :photos, Phone = :phone, Address = :address WHERE TechnicianID = :id";
+        $stmt = $pdo->prepare($updateTech);
+
+        // Bind parameters
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+        $stmt->bindParam(':photos', $photo, PDO::PARAM_STR);
+        $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+        $stmt->bindParam(':address', $address, PDO::PARAM_STR);
+
+        // Execute the query and check for success
+        if ($stmt->execute()) {
+            $success[] = "Profile updated successfully";
+            header("Location: profile.php?id=" . $id);
+            exit();
+        } else {
+            // Handle database execution errors
+            $errorInfo = $stmt->errorInfo();
+            if (isset($errorInfo[2])) {
+                $errors[] = "Database error: " . htmlspecialchars($errorInfo[2]);
+            } else {
+                $errors[] = "Failed to update profile due to an unknown error.";
+            }
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -79,18 +107,15 @@ if (isset($_POST['profile_update'])) {
     body {
       background-color: #f8f9fa;
     }
-
     .profile-container {
       margin-top: 50px;
     }
-
     .profile-card {
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       padding: 20px;
       background-color: white;
     }
-
     .profile-photo {
       width: 150px;
       height: 150px;
@@ -98,60 +123,38 @@ if (isset($_POST['profile_update'])) {
       object-fit: cover;
       margin-bottom: 20px;
     }
-
     .section-title {
       font-size: 1.5rem;
       font-weight: bold;
       color: #333;
       margin-bottom: 20px;
     }
-
     .profile-info {
       font-size: 1rem;
       margin-bottom: 15px;
     }
-
     .btn-custom {
       background-color: #007bff;
       color: white;
       border-radius: 5px;
       padding: 10px 20px;
     }
-
     .btn-custom:hover {
       background-color: #0056b3;
     }
-
-    .profile-info {
-      margin-bottom: 10px;
-    }
-
-    .card-body {
-      text-align: left;
-    }
-
-    .modal-header .modal-title {
-      width: 100%;
-      text-align: center;
-    }
   </style>
 </head>
-
 <body>
-
-  <div class="profile-container text-center">
-    <div class="profile-card">
+  <div class="profile-container text-center ">
+    <div class="profile">
       <h3 class="section-title">Technician Profile</h3>
-
       <!-- Profile Image -->
       <img src="../images/technician/<?= $technician['photos'] ?? 'client-1.jpg' ?>" alt="Technician Photo" class="profile-photo">
-
       <!-- Profile Info -->
       <p class="profile-info"><strong>Career ID:</strong> #<?= $technician['career_id'] ?? 'N/A' ?></p>
       <p class="profile-info"><strong>Tech Code:</strong> <?= $technician['techCode'] ?? 'N/A' ?></p>
-
-      <div class="container">
-        <div class="shadow p-3 mb-4">
+      <div class="container rounded">
+        <div class="shadow-lg p-3 mb-4 ">
           <div class="card-body d-flex flex-column justify-content-center">
             <p class="profile-info"><strong>Name:</strong> <?= $technician['name'] ?? '' ?></p>
             <p class="profile-info"><strong>Email:</strong> <?= $technician['email'] ?? '' ?></p>
@@ -162,52 +165,47 @@ if (isset($_POST['profile_update'])) {
           </div>
         </div>
       </div>
-
       <div class="text-center mt-4">
         <button class="btn btn-custom" data-toggle="modal" data-target="#technician">Edit Profile</button>
       </div>
     </div>
   </div>
 
-
-
   <!-- Modal -->
-  <div class="modal fade " id="technician" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered " role="document">
+  <div class="modal fade" id="technician" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="technician">Edit Technician Profile</h5>
-
+          <h5 class="modal-title">Edit Technician Profile</h5>
         </div>
         <div class="modal-body">
           <form action="" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="id" value="<?= $techician['TechnicianID']; ?>">
+            <input type="hidden" name="id" value="<?= htmlspecialchars($technician['TechnicianID']); ?>">
+            <input type="hidden" name="existing_photo" value="<?= htmlspecialchars($technician['photos'] ?? ''); ?>">
+
             <div class="mb-3">
-              <input type="text" name="name" value="<?= $techician['name'] ?? ""; ?>" class="form-control" placeholder="Name">
+              <input type="text" name="name" value="<?= htmlspecialchars($technician['name'] ?? ''); ?>" class="form-control" placeholder="Name">
             </div>
             <div class="mb-3">
-              <input type="email" name="email" value="<?= $techician['email'] ?? ""; ?>" class=" form-control" placeholder="Email">
+              <input type="email" name="email" value="<?= htmlspecialchars($technician['email'] ?? '') ?>" class="form-control" placeholder="Email">
             </div>
-            <div class="mb-3">
-              <input type="password" name="password" value="<?= $techician['password'] ?? ""; ?>" class=" form-control" placeholder="Password" disabled>
-            </div>
+            <!-- <div class="mb-3">
+              <input type="password" name="password" value="<= htmlspecialchars($technician['password'] ?? '') ?>" class="form-control" placeholder="Password" disabled>
+            </div> -->
             <div class="mb-3">
               <label for="">Upload Photo</label>
-              <img src="../images/technician/<?= $techician['photos'] ?? 'client-1.jpg'; ?>" alt="" width="150px">
+              <img src="../images/technician/<?= htmlspecialchars($technician['photos'] ?? 'client-1.jpg'); ?>" alt="" width="150px">
               <input type="file" class="form-control" name="photos">
             </div>
             <div class="mb-3">
-              <input type="text" name="Phone" value="<?= $techician['Phone'] ?? ""; ?>" class="form-control" placeholder="Phone">
+              <input type="text" name="Phone" value="<?= htmlspecialchars($technician['Phone'] ?? ''); ?>" class="form-control" placeholder="Phone">
             </div>
-
             <div class="mb-3">
-              <textarea name="Address" class="form-control" placeholder="Address"><?= $techician['Address'] ?? ""; ?></textarea>
+              <textarea name="Address" class="form-control" placeholder="Address"><?= htmlspecialchars($technician['Address'] ?? ''); ?></textarea>
             </div>
             <input type="submit" class="btn btn-info" name="profile_update">
           </form>
-
         </div>
-
       </div>
     </div>
   </div>
@@ -217,5 +215,4 @@ if (isset($_POST['profile_update'])) {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
-
 </html>

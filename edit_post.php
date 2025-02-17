@@ -90,7 +90,17 @@ include './layout/header.php';
 ?>
 
 <?php include("./layout/header.php"); ?>
-
+<style>
+.remove-photo {
+    position: absolute;
+    top: 1px;
+    right: 3px;
+    padding: 2px 10px; /* Adjust padding to make the X smaller if needed */
+    font-size: 20px; /* Adjust size of X */
+    /* border-radius: 50%; Makes the button circular if you want */
+    /* z-index: 1; Ensures button is above the image */
+}
+</style>
 <section class="edit_post_section layout_padding" id="edit_post">
     <div class="container">
         <div class="heading_container text-center mb-4">

@@ -177,27 +177,11 @@ include("./layout/hero2.php");
 
 
         <?php if (!empty($posts)): ?>
-<<<<<<< HEAD
-            <table class="table table-striped table-bordered m-3" id="posts-table">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Phone</th>
-                        <th>Price</th>
-                        <th>Address</th>
-                        <th>Content</th>
-                        <th>Photos</th>
-                        <th style="width: 150px;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($posts as $post): ?>
-=======
             <div class="table-responsive">
                 <table id="postsTable" class="table table-hover">
                     <thead>
->>>>>>> a5ae75edba6c8ab30ec8a0304439b7071ad83e5e
                         <tr>
+                            <th>ID</th>
                             <th>Title</th>
                             <th>Phone</th>
                             <th>Price</th>
@@ -210,6 +194,7 @@ include("./layout/hero2.php");
                     <tbody>
                         <?php foreach ($posts as $post): ?>
                             <tr>
+                                <td><?php echo htmlspecialchars($post['id']); ?></td>
                                 <td><?php
                                     $title = htmlspecialchars($post['title']);
                                     echo (strlen($title) > 15) ? substr($title, 0, 15) . '...' : $title;
@@ -362,7 +347,6 @@ include("./layout/hero2.php");
             imagePreview.style.display = 'none';
         }
     });
-<<<<<<< HEAD
 </script>
 
 <script>
@@ -406,6 +390,3 @@ fclose($file);
 
 echo 'CSV file created successfully!';
 > -->
-=======
-</script>
->>>>>>> a5ae75edba6c8ab30ec8a0304439b7071ad83e5e
